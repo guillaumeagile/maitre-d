@@ -4,7 +4,7 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 
-class dumbTest : StringSpec({
+class DumbTest : StringSpec({
 
     "fetchUser should return name and id" {
         val user = fetchUser("sam")
