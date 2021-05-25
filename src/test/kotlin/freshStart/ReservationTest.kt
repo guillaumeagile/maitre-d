@@ -20,5 +20,3 @@ class TestThatReservation : StringSpec({
         resultat.isFailure shouldBe true
     }
 })
-
-
