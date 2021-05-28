@@ -16,7 +16,14 @@ class TestThatReservation : StringSpec({
 
     "Should not have  a quantity  equal to 0" {
         val resultat =  create (LocalDate.of(1990, Month.DECEMBER, 15), 0)
-
         resultat.isFailure shouldBe true
     }
+
+    "Should not a quantity more than 12" {
+        val resultat =  create (LocalDate.of(1990, Month.DECEMBER, 15), 13        )
+        resultat.isFailure shouldBe true
+    }
+
+
+
 })
