@@ -9,9 +9,9 @@ import java.time.Month
 class TestThatReservation : StringSpec({
 
     "Should have a date and a quantity" {
-        val reservation = Reservation(LocalDate.of(1990, Month.DECEMBER, 15), 1)
-        reservation.Date shouldBe LocalDate.of(1990, Month.DECEMBER, 15)
-        reservation.Quantity shouldBe 1
+        val reservation = Reservation(LocalDate.of(1990, Month.DECEMBER, 15), Quantity(1))
+        reservation.date shouldBe LocalDate.of(1990, Month.DECEMBER, 15)
+        reservation.quantity shouldBe 1
     }
 
     "Should not have  a quantity  equal to 0" {
