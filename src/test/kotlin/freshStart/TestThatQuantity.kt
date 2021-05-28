@@ -12,7 +12,7 @@ class TestThatQuantity : StringSpec({
         quantity.isFailure shouldBe true
     }
 
-    "Should  have  a quantity  equal to 4" {
+    "Should have a quantity  equal to 4" {
         var expected = 4
         val quantity = Quantity.create(expected)
         quantity.isSuccess shouldBe true
@@ -31,6 +31,12 @@ class TestThatQuantity : StringSpec({
         var expected = 2
         val quantity = Quantity.create(expected)
         quantity.getOrNull() shouldBe Quantity(2)
+    }
+
+    "Should  have  a quantity 2 not equal to a quantity 3" {
+        var expected = 2
+        val quantity = Quantity.create(expected)
+        quantity.getOrNull() shouldNotBe Quantity(3)
     }
 
 })
