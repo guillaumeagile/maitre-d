@@ -4,7 +4,7 @@ package freshStart
 
     companion object {
         fun create(value_ : Int ) : Result<Quantity> {
-            if (value_ <=0)
+            if ((value_ <=0)  || (value_ > 12))
                 return Result.failure(InvalidQuantityForReservation())
             return Result.success(Quantity(value_))
         }
