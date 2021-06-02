@@ -3,8 +3,10 @@ package freshStart
  data class Quantity(val value_: Int) {
 
     companion object {
+        private const val MAX_SEATS: Int = 12
         fun create(value_ : Int ) : Result<Quantity> {
-            if ((value_ <=0)  || (value_ > 12))
+
+            if ((value_ <=0)  || (value_ > MAX_SEATS))
                 return Result.failure(InvalidQuantityForReservation())
             return Result.success(Quantity(value_))
         }
