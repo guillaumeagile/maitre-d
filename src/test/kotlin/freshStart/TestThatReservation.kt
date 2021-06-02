@@ -22,13 +22,19 @@ class TestThatReservation : StringSpec({
     "Should have not a quantity more than the table capacity (12)" {
         val resultat =  Reservation.create (LocalDate.of(1990, Month.DECEMBER, 15), 13, Table(12)        )
         resultat.isFailure shouldBe true
+        resultat.onFailure { e -> e is NoRoomLeft }
     }
 
     "Should have not a quantity more than the table capacity (4)" {
         val resultat =  Reservation.create (LocalDate.of(1990, Month.DECEMBER, 15), 5, Table(4)        )
         resultat.isFailure shouldBe true
+        resultat.onFailure { e -> e is NoRoomLeft }
     }
 
-
+    "Should have not a negative quantity " {
+        val resultat =  Reservation.create (LocalDate.of(1990, Month.DECEMBER, 15), -2, Table(-1)        )
+        resultat.isFailure shouldBe true
+        resultat.onFailure { e -> e is InvalidQuantityForReservation }
+    }
 
 })
