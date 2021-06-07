@@ -39,12 +39,43 @@ class TestThatReservation : StringSpec({
 
     "Should have not a quantity more than the table capacity (4) the same day" {
         val table = Table(4)
+        Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, table )
+        val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 2, table)
+        resultat.isFailure shouldBe true
+        resultat.onFailure { e -> e is NoRoomLeft }
+    }
+
+    "Should have  a quantity enough for the same day" {
+        val table = Table(10)
+        Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, table )
+        val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, table)
+        resultat.isFailure shouldBe false
+        resultat.getOrNull()?.quantity shouldBe 3
+    }
+
+    "Should have a quantity enough for two different day" {
+        val table = Table(4)
         Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 2, table )
+        val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 14), 3, table)
+        resultat.isFailure shouldBe false
+        resultat.getOrNull()?.quantity shouldBe 3
+    }
+
+
+    "Should have a quantity not enough for the same day when multiple reservation already accepter" {
+        val table = Table(10)
+        Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, table )
+        Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 2, table )
+        Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, table )
         val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, table)
         resultat.isFailure shouldBe true
         resultat.onFailure { e -> e is NoRoomLeft }
 
     }
+
+
+
+
 
 
 })
