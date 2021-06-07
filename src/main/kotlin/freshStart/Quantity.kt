@@ -15,7 +15,8 @@ package freshStart
             return other.toInt() == value_
         if (other is Quantity)
             return (other.value_ === this.value_)
-            //    return (other === this)  // ne fonctionne pas!  pourquoi?????
+            //    return (other === this)  // ne fonctionne pas!  parce que comme on est en train de redefinir l'égalité,
+            //  l'égalité 'par défaut' des data class telle que fabriquée par le compilateur ne fonctionne plus.
         return false
     }
 
