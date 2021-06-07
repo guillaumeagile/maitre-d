@@ -7,10 +7,10 @@ class DailySeats() {
 
 
     fun reserve(date: LocalDate, seats: Int) {
-
+        TODO("remplacer Int par Quantity")
         this.dailyAccumulation.put(date, seats + this.dailyAccumulation.getOrDefault(date, 0))
     }
-
+  //  TODO("remplacer return Int par Quantity")
     fun howManyReservedOn(date: LocalDate): Int = dailyAccumulation.getOrDefault(date, 0)
 }
 
