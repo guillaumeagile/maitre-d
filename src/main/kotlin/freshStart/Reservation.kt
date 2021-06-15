@@ -5,9 +5,8 @@ import java.time.LocalDate
 class DailySeats() {
     var dailyAccumulation: HashMap<LocalDate, Int> = HashMap<LocalDate, Int>()
 
-
     fun reserve(date: LocalDate, seats: Int) {
-        TODO("remplacer Int par Quantity")
+      //  TODO("remplacer Int par Quantity")
         this.dailyAccumulation.put(date, seats + this.dailyAccumulation.getOrDefault(date, 0))
     }
   //  TODO("remplacer return Int par Quantity")
@@ -16,14 +15,15 @@ class DailySeats() {
 
 class Reservation(val date: LocalDate, val quantity: Quantity) {
     companion object {
-        var dailySeats = DailySeats()
+        var dailySeatsOverallReservations = DailySeats()
+
         fun create(date: LocalDate, quantity: Int, table: Table): Result<Reservation> {
             val qtt = Quantity.create(quantity)
             return qtt.fold({ q ->
-                val reservedSeats = dailySeats.howManyReservedOn(date) + q.value_
+                val reservedSeats = dailySeatsOverallReservations.howManyReservedOn(date) + q.value_
                 if (reservedSeats > table.size)
                     return Result.failure(NoRoomLeft())
-                dailySeats.reserve(date, q.value_)
+                dailySeatsOverallReservations.reserve(date, q.value_)
                 return Result.success(Reservation(date, q))
             },
                 { _ -> Result.failure(InvalidQuantityForReservation()) }

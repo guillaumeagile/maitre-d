@@ -1,5 +1,7 @@
 package freshStart
 
+import io.kotlintest.matchers.beInstanceOf
+import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 import java.time.LocalDate
@@ -19,13 +21,13 @@ class TestThatReservation : StringSpec({
         resultat.isFailure shouldBe true
     }
 
-    "Should have not a quantity more than the table capacity (12)" {
+    "Should have not a quantity more than the table size (12)" {
         val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 13, Table(12))
         resultat.isFailure shouldBe true
         resultat.onFailure { e -> e is NoRoomLeft }
     }
 
-    "Should have not a quantity more than the table capacity (4)" {
+    "Should have not a quantity more than the table size (4)" {
         val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 5, Table(4))
         resultat.isFailure shouldBe true
         resultat.onFailure { e -> e is NoRoomLeft }
@@ -69,13 +71,25 @@ class TestThatReservation : StringSpec({
         Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, table )
         val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, table)
         resultat.isFailure shouldBe true
-        resultat.onFailure { e -> e is NoRoomLeft }
-
+        resultat.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
     }
 
+    "Should not accept reservation if the last table size is changing" {
+        Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 1, Table(10) )
+        val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, Table(4))
+        resultat.isFailure shouldBe true
+        resultat.onFailure { e ->  e should beInstanceOf<CannotChangeTableSize>()  }
+    }
 
+    "new design JP" {
+        val result =  Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 5, Table(10) )
+//        val result2 = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 1, result.table )
 
-
-
-
+    }
+/*
+    "new design Anth"{
+        val table : Table(10)
+        val result = table.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 5)
+    }
+*/
 })
