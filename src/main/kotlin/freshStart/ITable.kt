@@ -1,0 +1,5 @@
+package freshStart
+
+interface ITable {
+
+}
