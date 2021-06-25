@@ -17,10 +17,10 @@ class DailySeats() {
 class Reservation(val date: LocalDate, val quantity: Quantity) {
     companion object {
         var dailySeatsOverallReservations = DailySeats()
-        var uniqueTable: ITable = UndefinedTable()   // SINGLETON = piège à con!
+        val uniqueTable: ITable = UndefinedTable()   // SINGLETON = piège à con!
 
         fun create(date: LocalDate, quantity: Int, table: Table): Result<Reservation> {
-            TODO ("TO FIX:    no singleton!  no var in companion !!!!")
+           // TODO ("TO FIX:    no singleton!  no var in companion !!!!")
             if (uniqueTable != table)
                 return Result.failure(CannotChangeTableSize())
 
@@ -31,7 +31,7 @@ class Reservation(val date: LocalDate, val quantity: Quantity) {
                 if (reservedSeats > table.size)
                     return Result.failure(NoRoomLeft())
                 dailySeatsOverallReservations.reserve(date, q.value_)
-                uniqueTable = table
+
                 return Result.success(Reservation(date, q))
             },
                 { _ -> Result.failure(InvalidQuantityForReservation()) }

@@ -10,10 +10,12 @@ import java.time.Month
 
 class TestThatReservation : StringSpec({
 
+
     "Should have a date and a quantity" {
-        val reservation = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 1, Table(1)).getOrNull()
-        reservation?.date shouldBe LocalDate.of(1990, Month.DECEMBER, 15)
-        reservation?.quantity shouldBe 1
+        val maitreD = MaitreD( 1)
+        var actualReservation = maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 1).getOrThrow()
+        actualReservation.date shouldBe LocalDate.of(1990, Month.DECEMBER, 15)
+        actualReservation.quantity shouldBe 1
     }
 
     "Should not have  a quantity  equal to 0" {
@@ -73,14 +75,14 @@ class TestThatReservation : StringSpec({
         resultat.isFailure shouldBe true
         resultat.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
     }
-
+/*
     "Should not accept reservation if the last table size is changing" {
         Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 1, Table(10) )
         val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, Table(4))
         resultat.isFailure shouldBe true
         resultat.onFailure { e ->  e should beInstanceOf<CannotChangeTableSize>()  }
     }
-
+*/
     "new design JP" {
         val result =  Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 5, Table(10) )
 //        val result2 = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 1, result.table )
