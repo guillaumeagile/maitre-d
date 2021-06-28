@@ -19,8 +19,11 @@ class TestThatReservation : StringSpec({
     }
 
     "Should not have  a quantity  equal to 0" {
-        val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 0, Table(1))
-        resultat.isFailure shouldBe true
+        val maitreD = MaitreD( 1)
+        var actualReservation = maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 0)
+        actualReservation.isFailure shouldBe true
+        actualReservation.onFailure { e ->  e should beInstanceOf<InvalidQuantityForReservation>() }
+
     }
 
     "Should have not a quantity more than the table size (12)" {
