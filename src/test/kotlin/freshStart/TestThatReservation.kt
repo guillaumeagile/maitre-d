@@ -12,74 +12,80 @@ class TestThatReservation : StringSpec({
 
 
     "Should have a date and a quantity" {
-        val maitreD = MaitreD( 1)
+        val maitreD = MaitreD(1)
         val actualReservation = maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 1).getOrThrow()
         actualReservation.date shouldBe LocalDate.of(1990, Month.DECEMBER, 15)
         actualReservation.quantity shouldBe 1
     }
 
     "Should not have  a quantity  equal to 0" {
-        val maitreD = MaitreD( 1)
+        val maitreD = MaitreD(1)
         val actualReservation = maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 0)
         actualReservation.isFailure shouldBe true
-        actualReservation.onFailure { e ->  e should beInstanceOf<InvalidQuantityForReservation>() }
+        actualReservation.onFailure { e -> e should beInstanceOf<InvalidQuantityForReservation>() }
     }
 
     "Should have not a quantity more than the table size (12)" {
-        val maitreD = MaitreD( 12)
+        val maitreD = MaitreD(12)
         val actualReservation = maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 13)
         actualReservation.isFailure shouldBe true
-        actualReservation.onFailure { e ->  e should beInstanceOf<NoRoomLeft>() }
+        actualReservation.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
     }
 
     "Should have not a negative quantity " {
-        val maitreD = MaitreD( -1)
+        val maitreD = MaitreD(-1)
         val actualReservation = maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), -2)
         actualReservation.isFailure shouldBe true
-        actualReservation.onFailure { e ->  e should beInstanceOf<InvalidQuantityForReservation>() }
+        actualReservation.onFailure { e -> e should beInstanceOf<InvalidQuantityForReservation>() }
     }
 
     "Should have not a quantity more than the table capacity (4) the same day" {
-        val maitreD = MaitreD( 4)
+        val maitreD = MaitreD(4)
         maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 3)
         val actualReservation = maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 2)
         actualReservation.isFailure shouldBe true
-        actualReservation.onFailure { e ->  e should beInstanceOf<NoRoomLeft>() }
+        actualReservation.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
     }
 
     "Should have  a quantity enough for the same day" {
-        val maitreD = MaitreD( 10)
+        val maitreD = MaitreD(10)
         maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 3)
         val actualReservation = maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 7)
-        actualReservation.isFailure shouldBe false
+        actualReservation.isSuccess shouldBe true
         actualReservation.getOrThrow().quantity shouldBe 7
     }
 
     "Should have a quantity enough for two different day" {
-        val table = Table(4)
-        Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 2, table )
-        val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 14), 3, table)
-        resultat.isFailure shouldBe false
-        resultat.getOrNull()?.quantity shouldBe 3
+        val maitreD = MaitreD(4)
+        val aDay = LocalDate.of(1990, Month.DECEMBER, 15)
+        maitreD.reserve(aDay, 2)
+        val actualReservation = maitreD.reserve(aDay.plusDays(1), 3)
+        actualReservation.isSuccess shouldBe true
+        actualReservation.getOrThrow().quantity shouldBe 3
     }
 
+    //TODO:   pouvoir reserver à nouveau après un fail d'une tentative de résa
 
-    "Should have a quantity not enough for the same day when multiple reservation already accepter" {
-        val table = Table(10)
-        Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, table )
-        Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 2, table )
-        Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, table )
-        val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, table)
-        resultat.isFailure shouldBe true
-        resultat.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
+    "Should have a quantity not enough for the same day when multiple reservation already accepted" {
+        val maitreD = MaitreD(10)
+        val aDay = LocalDate.of(1990, Month.DECEMBER, 15)
+        maitreD.reserve(aDay, 3)
+        maitreD.reserve(aDay, 2)
+        maitreD.reserve(aDay, 3)
+        val actualReservation = maitreD.reserve(aDay, 3)
+        actualReservation.isFailure shouldBe true
+        actualReservation.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
     }
-/*
-    "Should not accept reservation if the last table size is changing" {
-        Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 1, Table(10) )
-        val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, Table(4))
-        resultat.isFailure shouldBe true
-        resultat.onFailure { e ->  e should beInstanceOf<CannotChangeTableSize>()  }
-    }
-*/
 
+    "Should  accept reservation for different table size (each MaitreD own its table)" {
+        val maitreD = MaitreD(10)
+        val maitreD2 = MaitreD(3)
+
+        val aDay = LocalDate.of(1990, Month.DECEMBER, 15)
+        val actualReservation = maitreD.reserve(aDay.plusDays(1), 3)
+        actualReservation.isSuccess shouldBe true
+
+        val actualReservation2 = maitreD2.reserve(aDay.plusDays(1), 3)
+        actualReservation2.isSuccess shouldBe true
+    }
 })
