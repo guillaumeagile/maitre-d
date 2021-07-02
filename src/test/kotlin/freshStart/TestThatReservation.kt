@@ -26,29 +26,24 @@ class TestThatReservation : StringSpec({
     }
 
     "Should have not a quantity more than the table size (12)" {
-        val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 13, Table(12))
-        resultat.isFailure shouldBe true
-        resultat.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
-    }
-
-    "Should have not a quantity more than the table size (4)" {
-        val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 5, Table(4))
-        resultat.isFailure shouldBe true
-        resultat.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
+        val maitreD = MaitreD( 12)
+        var actualReservation = maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 13)
+        actualReservation.isFailure shouldBe true
+        actualReservation.onFailure { e ->  e should beInstanceOf<NoRoomLeft>() }
     }
 
     "Should have not a negative quantity " {
-        val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), -2, Table(-1))
-        resultat.isFailure shouldBe true
-        resultat.onFailure { e -> e should beInstanceOf<InvalidQuantityForReservation>() }
+        val maitreD = MaitreD( -1)
+        var actualReservation = maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), -2)
+        actualReservation.isFailure shouldBe true
+        actualReservation.onFailure { e ->  e should beInstanceOf<InvalidQuantityForReservation>() }
     }
 
     "Should have not a quantity more than the table capacity (4) the same day" {
-        val table = Table(4)
-        Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 3, table )
-        val resultat = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 2, table)
-        resultat.isFailure shouldBe true
-        resultat.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
+        val maitreD = MaitreD( 4)
+        maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 3)
+        val actualReservation = maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 2)
+        actualReservation.isFailure shouldBe true
     }
 
     "Should have  a quantity enough for the same day" {
@@ -85,15 +80,5 @@ class TestThatReservation : StringSpec({
         resultat.onFailure { e ->  e should beInstanceOf<CannotChangeTableSize>()  }
     }
 */
-    "new design JP" {
-        val result =  Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 5, Table(10) )
-//        val result2 = Reservation.create(LocalDate.of(1990, Month.DECEMBER, 15), 1, result.table )
 
-    }
-/*
-    "new design Anth"{
-        val table : Table(10)
-        val result = table.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 5)
-    }
-*/
 })
