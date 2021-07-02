@@ -14,28 +14,5 @@ class DailySeats() {
     fun howManyReservedOn(date: LocalDate): Int = dailyAccumulation.getOrDefault(date, 0)
 }
 
-class Reservation(val date: LocalDate, val quantity: Quantity) {
-    companion object {
-        var dailySeatsOverallReservations = DailySeats()
-        val uniqueTable: ITable = UndefinedTable()   // SINGLETON = piège à con!
-
-        fun create(date: LocalDate, quantity: Int, table: Table): Result<Reservation> {
-           // TODO ("TO FIX:    no singleton!  no var in companion !!!!")
-            if (uniqueTable != table)
-                return Result.failure(CannotChangeTableSize())
-
-            val qtt = Quantity.create(quantity)
-
-            return qtt.fold({ q ->
-                val reservedSeats = dailySeatsOverallReservations.howManyReservedOn(date) + q.value_
-                if (reservedSeats > table.size)
-                    return Result.failure(NoRoomLeft())
-                dailySeatsOverallReservations.reserve(date, q.value_)
-
-                return Result.success(Reservation(date, q))
-            },
-                { _ -> Result.failure(InvalidQuantityForReservation()) }
-            )
-        }
-    }
+data class Reservation(val date: LocalDate, val quantity: Quantity) {
 }
