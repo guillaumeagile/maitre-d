@@ -39,4 +39,12 @@ class TestThatQuantity : StringSpec({
         quantity.getOrNull() shouldNotBe Quantity(3)
     }
 
+    "should be able to add a quantity to another" {
+        val quantity1 = Quantity.create(1).getOrThrow()
+        val quantity2 = Quantity.create(2).getOrThrow()
+        val expected = Quantity.create(3).getOrThrow()
+
+        quantity1.plus(quantity2) shouldBe expected
+    }
+
 })
