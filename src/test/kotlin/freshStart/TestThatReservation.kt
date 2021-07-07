@@ -77,7 +77,16 @@ class TestThatReservation : StringSpec({
         actualReservation.getOrThrow().quantity shouldBe 3
     }
 
-    //TODO:   pouvoir reserver à nouveau après un fail d'une tentative de résa
+    "Should reserve again after a failing reservation "{
+        val maitreD = MaitreD(3)
+        val aDay = LocalDate.of(1990, Month.DECEMBER, 15)
+        val firstReservation = maitreD.reserve(aDay, 4)
+
+        val actualReservation = maitreD.reserve(aDay, 1)
+
+        actualReservation.isSuccess shouldBe true
+        actualReservation.getOrThrow().quantity shouldBe 1
+    }
 
     "Should have a quantity not enough for the same day when multiple reservation already accepted" {
         val maitreD = MaitreD(10)
