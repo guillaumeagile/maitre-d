@@ -2,7 +2,7 @@ package freshStart
 
 import java.time.LocalDate
 
-class MaitreD(val sizeTable: Array<Int>) {
+class MaitreD(val sizeOfTables: Array<Int>) {
     var dailySeatsOverallReservations = DailySeats()
 
     fun reserve(date: LocalDate, numberOfGuests: Int): Result<Reservation> {
@@ -10,10 +10,11 @@ class MaitreD(val sizeTable: Array<Int>) {
 
         return resultQuantity.fold(
             { quantity ->
-                val reservedSeats = dailySeatsOverallReservations.howManyReservedOn2(date).plus( quantity).value_
-                if (reservedSeats > sizeTable.first())
+                val quantityOfReservedSeat  =  dailySeatsOverallReservations.howManyReservedOn(date) +  quantity
+                val sizeFirstTable = Quantity(sizeOfTables.first())
+                if (quantityOfReservedSeat > sizeFirstTable )
                     return Result.failure(NoRoomLeft())
-                dailySeatsOverallReservations.reserve(date, quantity.value_)  //TODO: utiliser QUantity (primitive obsession)
+                dailySeatsOverallReservations.reserve(date, quantity)
                 val reservation = Reservation(date, quantity)
 
                 Result.success(reservation)

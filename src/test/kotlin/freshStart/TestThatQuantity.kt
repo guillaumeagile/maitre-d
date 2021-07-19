@@ -3,7 +3,6 @@ package freshStart
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
-import java.util.*
 
 class TestThatQuantity : StringSpec({
 
@@ -45,6 +44,16 @@ class TestThatQuantity : StringSpec({
         val expected = Quantity.create(3).getOrThrow()
 
         quantity1.plus(quantity2) shouldBe expected
+        quantity1  + quantity2 shouldBe expected
+    }
+
+    "should be compared one to a greater quantity"  {
+        val quantity1 = Quantity.create(1).getOrThrow()
+        val quantity2 = Quantity.create(2).getOrThrow()
+
+        (quantity2 > quantity1) shouldBe true
+        (quantity1 < quantity2) shouldBe true
+        (quantity1 == quantity2) shouldBe false
     }
 
 })

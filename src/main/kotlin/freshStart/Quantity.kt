@@ -20,7 +20,12 @@ data class Quantity(val value_: Int) {
         return false
     }
 
-    fun plus(quantity: Quantity): Quantity = Quantity(this.value_ + quantity.value_)
+    operator fun plus(quantity: Quantity): Quantity = Quantity(this.value_ + quantity.value_)
+
+
+    operator fun compareTo(q1: Quantity): Int {
+        return this.value_ - q1.value_
+    }
 
 /*
      override fun toString(): String {

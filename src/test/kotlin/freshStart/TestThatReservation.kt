@@ -78,9 +78,9 @@ class TestThatReservation : StringSpec({
     }
 
     "Should reserve again after a failing reservation "{
-        val maitreD = MaitreD(arrayOf(3))
+        val maitreD = MaitreD( arrayOf(3))
         val aDay = LocalDate.of(1990, Month.DECEMBER, 15)
-        val firstReservation = maitreD.reserve(aDay, 4)
+        maitreD.reserve(aDay, 4)
 
         val actualReservation = maitreD.reserve(aDay, 1)
 
