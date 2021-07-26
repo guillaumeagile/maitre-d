@@ -11,15 +11,24 @@ class MaitreD( val tables: MutableList<ITable>) {
         return resultQuantity.fold(
             { quantity ->
                 val quantityOfReservedSeat  =  dailySeatsOverallReservations.howManyReservedOn(date) +  quantity
-                val sizeFirstTable = Quantity(tables.first().size)
-                if (tables.first().isAlreadyReserved())
-                    return Result.failure(TableAlreadyReserved())
-                if (quantityOfReservedSeat > sizeFirstTable )
-                    return Result.failure(NoRoomLeft())
-                dailySeatsOverallReservations.reserve(date, quantity)
-                val reservation = Reservation(date, quantity)
-                tables[0] =  tables.first().reserve()
-                Result.success(reservation)
+                var reservation : Reservation? = null
+                for ((index, oneTable) in tables.withIndex())
+                {
+                    val sizeFirstTable = Quantity(oneTable.size)
+                    if (oneTable.isAlreadyReserved())
+                        continue
+                 /*   if (quantityOfReservedSeat > sizeFirstTable )
+                        return Result.failure(NoRoomLeft())*/
+                    dailySeatsOverallReservations.reserve(date, quantity)
+                     reservation = Reservation(date, quantity)
+                    tables[index] =  oneTable.reserve()
+                    break
+                }
+
+                if (reservation != null)
+                    return Result.success(reservation)
+               return Result.failure(TableAlreadyReserved())
+
             },
             { _ -> Result.failure(InvalidQuantityForReservation()) })
     }

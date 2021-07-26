@@ -13,6 +13,7 @@ class TestThatReservation : StringSpec({
 
     fun buildMaitreDWithSharedTable(uniqueTableSize: Int) = MaitreD( mutableListOf(SharedTable(uniqueTableSize)))
     fun buildMaitreDWithOneHauteCuisineTable(uniqueTableSize: Int) = MaitreD( mutableListOf(HauteCuisineTable(uniqueTableSize)))
+    fun buildMaitreDWithTwoHauteCuisineTable(uniqueTableSize: Int) = MaitreD( mutableListOf(HauteCuisineTable(uniqueTableSize), HauteCuisineTable(uniqueTableSize)))
 
     "Should have a date and a quantity" {
         val maitreD = buildMaitreDWithSharedTable(1)
@@ -126,6 +127,17 @@ class TestThatReservation : StringSpec({
 
         firstReservation.isSuccess shouldBe true
         secondReservation.isFailure shouldBe true
+    }
+
+    "should accept 2 reservations successively because we have 2 tables"{
+        val maitreD = buildMaitreDWithTwoHauteCuisineTable(2)
+        val aDay = LocalDate.of(1990, Month.DECEMBER, 15)
+
+        val firstReservation = maitreD.reserve(aDay, 2)
+        val secondReservation = maitreD.reserve(aDay, 2)
+
+        firstReservation.isSuccess shouldBe true
+        secondReservation.isSuccess shouldBe true
     }
 
 /*    "Should  accept 2 reservations of 2 and occupied any table of size2" {
