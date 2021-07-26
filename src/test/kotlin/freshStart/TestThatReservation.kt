@@ -11,8 +11,8 @@ import java.time.Month
 
 class TestThatReservation : StringSpec({
 
-    fun buildMaitreDWithSharedTable(uniqueTableSize: Int) = MaitreD( setOf(SharedTable(uniqueTableSize)))
-    fun buildMaitreDWithOneHauteCuisineTable(uniqueTableSize: Int) = MaitreD( setOf(HauteCuisineTable(uniqueTableSize)))
+    fun buildMaitreDWithSharedTable(uniqueTableSize: Int) = MaitreD( mutableListOf(SharedTable(uniqueTableSize)))
+    fun buildMaitreDWithOneHauteCuisineTable(uniqueTableSize: Int) = MaitreD( mutableListOf(HauteCuisineTable(uniqueTableSize)))
 
     "Should have a date and a quantity" {
         val maitreD = buildMaitreDWithSharedTable(1)

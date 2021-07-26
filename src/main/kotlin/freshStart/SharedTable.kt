@@ -5,18 +5,8 @@ data class SharedTable(override val size: Int) : ITable {
         return false
     }
 
-    override fun reserve() {
-    }
-}
-
-data class HauteCuisineTable(override val size: Int) : ITable {
-    var _isAlreadyReserved = false  //TODO:  rendre immutable
-    override fun isAlreadyReserved(): Boolean {
-        return _isAlreadyReserved
-    }
-
-    override fun reserve() {
-        _isAlreadyReserved = true
+    override fun reserve(): ITable {
+        return this
     }
 }
 
@@ -30,7 +20,7 @@ class UndefinedTable(override val size: Int = 0) : ITable {
         return true
     }
 
-    override fun reserve() {
+    override fun reserve(): ITable {
         TODO("Not yet implemented")
     }
 }

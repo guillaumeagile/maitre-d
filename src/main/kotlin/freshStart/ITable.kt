@@ -2,6 +2,6 @@ package freshStart
 
 interface ITable {
     fun isAlreadyReserved(): Boolean
-    fun reserve()
+    fun reserve(): ITable
     val size: Int
 }

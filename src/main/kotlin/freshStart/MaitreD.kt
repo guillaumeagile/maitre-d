@@ -2,7 +2,7 @@ package freshStart
 
 import java.time.LocalDate
 
-class MaitreD( val tables: Set<ITable>) {
+class MaitreD( val tables: MutableList<ITable>) {
     var dailySeatsOverallReservations = DailySeats()
 
     fun reserve(date: LocalDate, numberOfGuests: Int): Result<Reservation> {
@@ -18,7 +18,7 @@ class MaitreD( val tables: Set<ITable>) {
                     return Result.failure(NoRoomLeft())
                 dailySeatsOverallReservations.reserve(date, quantity)
                 val reservation = Reservation(date, quantity)
-                tables.first().reserve()
+                tables[0] =  tables.first().reserve()
                 Result.success(reservation)
             },
             { _ -> Result.failure(InvalidQuantityForReservation()) })
