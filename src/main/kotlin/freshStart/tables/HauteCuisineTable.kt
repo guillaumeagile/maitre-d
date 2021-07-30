@@ -1,4 +1,6 @@
-package freshStart
+package freshStart.tables
+
+import freshStart.ITable
 
 class HauteCuisineTable(override val size: Int , val isReserved : Boolean = false) : ITable {
 
@@ -6,7 +8,7 @@ class HauteCuisineTable(override val size: Int , val isReserved : Boolean = fals
         fun createTableReservee(size: Int): HauteCuisineTable = HauteCuisineTable(size, true)
     }
 
-    override fun isAlreadyReserved(): Boolean {
+    override fun isFull(): Boolean {
         return isReserved
     }
 

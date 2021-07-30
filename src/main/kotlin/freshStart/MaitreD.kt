@@ -12,16 +12,17 @@ class MaitreD( val tables: MutableList<ITable>) {
             { quantity ->
                 val quantityOfReservedSeat  =  dailySeatsOverallReservations.howManyReservedOn(date) +  quantity
                 var reservation : Reservation? = null
-                for ((index, oneTable) in tables.withIndex())
+                for ((index, currentTable) in tables.withIndex())
                 {
-                    val sizeFirstTable = Quantity(oneTable.size)
-                    if (oneTable.isAlreadyReserved())
+                    if (currentTable.isFull())
                         continue
-                 /*   if (quantityOfReservedSeat > sizeFirstTable )
-                        return Result.failure(NoRoomLeft())*/
+                    if (quantityOfReservedSeat > Quantity(currentTable.size) )
+                        return Result.failure(NoRoomLeft())
+
                     dailySeatsOverallReservations.reserve(date, quantity)
-                     reservation = Reservation(date, quantity)
-                    tables[index] =  oneTable.reserve()
+                    reservation = Reservation(date, quantity)
+
+                    tables[index] =  currentTable.reserve()
                     break
                 }
 

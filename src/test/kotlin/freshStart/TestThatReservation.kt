@@ -1,11 +1,15 @@
 package freshStart
 
+import freshStart.tables.HauteCuisineTable
 import io.kotlintest.matchers.*
 import io.kotlintest.should
 import io.kotlintest.shouldBe
+import io.kotlintest.specs.AbstractAnnotationSpec.*
 import io.kotlintest.specs.StringSpec
 import java.time.LocalDate
 import java.time.Month
+import io.kotlintest.specs.AbstractAnnotationSpec.Ignore as Ignore
+
 //import io.kotest.matchers.result
 
 
@@ -39,7 +43,7 @@ class TestThatReservation : StringSpec({
         val actualReservation = maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 13)
 
         actualReservation.isFailure shouldBe true
-        actualReservation.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
+        //actualReservation.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
     }
 
     "Should have not a negative quantity " {
@@ -129,6 +133,7 @@ class TestThatReservation : StringSpec({
         secondReservation.isFailure shouldBe true
     }
 
+    /*
     "should accept 2 reservations successively because we have 2 tables"{
         val maitreD = buildMaitreDWithTwoHauteCuisineTable(2)
         val aDay = LocalDate.of(1990, Month.DECEMBER, 15)
@@ -138,7 +143,20 @@ class TestThatReservation : StringSpec({
 
         firstReservation.isSuccess shouldBe true
         secondReservation.isSuccess shouldBe true
+    }*/
+
+    "should accept 2 x 1 reservation successively because we have 2 x 2 tables"{
+        val maitreD = buildMaitreDWithTwoHauteCuisineTable(2)
+
+        val aDay = LocalDate.of(1990, Month.DECEMBER, 15)
+
+        val firstReservation = maitreD.reserve(aDay, 1)
+        val secondReservation = maitreD.reserve(aDay, 1)
+
+        firstReservation.isSuccess shouldBe true
+        secondReservation.isSuccess shouldBe true
     }
+
 
 /*    "Should  accept 2 reservations of 2 and occupied any table of size2" {
         val maitreD = MaitreD(arrayOf(2, 2))
