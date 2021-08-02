@@ -5,7 +5,7 @@ import java.time.LocalDate
 class DailySeats() {
     var dailyAccumulation: HashMap<LocalDate, Quantity> = HashMap<LocalDate, Quantity>()
 
-    fun reserve(date: LocalDate, seats: Quantity) {
+    fun addReservation(date: LocalDate, seats: Quantity) {
         this.dailyAccumulation.put(date, seats  +  this.dailyAccumulation.getOrDefault(date,  Quantity(0)))
     }
 

@@ -35,8 +35,7 @@ class TestThatSharedTable : StringSpec({
         val table1 = SharedTable(2)
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val result = table1.reserve(date1, Quantity(1))
-        result shouldNotBe table1
-        result.isFull() shouldBe false
+        result.isFull(date1) shouldBe false
     }
 
 
@@ -44,15 +43,15 @@ class TestThatSharedTable : StringSpec({
         val table1 = SharedTable(2)
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val result = table1.reserve(date1, Quantity(2))
-        result.isFull() shouldBe true
-        result shouldNotBe table1
+        result.isFull(date1) shouldBe true
+
     }
 
     "a reservation of a table over capacity should not modify the state of the table"{
         val table1 = SharedTable(1)
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val result = table1.reserve(date1, Quantity(2))
-        result shouldBe table1
+        result.isFull(date1) shouldBe false
     }
 
     "should reserve a table at different days"{
@@ -60,11 +59,12 @@ class TestThatSharedTable : StringSpec({
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val date2 = LocalDate.of(1990, Month.DECEMBER, 1)
         val table2 = table1.reserve(date1, Quantity(2))
-        table2 shouldNotBe table1
+        table2.isFull(date1) shouldBe true
+        table2.isFull(date2) shouldBe false
+        table2.canIReserve(date2, Quantity( 2)) shouldBe true
+
         val resultTable = table2.reserve(date2, Quantity(2))
-        resultTable shouldNotBe table2
-        resultTable shouldNotBe table1
-        resultTable.isFull() shouldBe false
+        resultTable.isFull(date2) shouldBe true
     }
 
 })
