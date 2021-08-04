@@ -19,7 +19,7 @@ class MaitreD( val tables: MutableList<ITable>) {
                     if (quantityOfReservedSeat > Quantity(currentTable.size) )
                         return Result.failure(NoRoomLeft())
 
-                    dailySeatsOverallReservations.addReservation(date, quantity)
+                    dailySeatsOverallReservations = dailySeatsOverallReservations.addReservation(date, quantity)
                     reservation = Reservation(date, quantity)
 
                     tables[index] =  currentTable.reserve()

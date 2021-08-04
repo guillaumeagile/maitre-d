@@ -54,7 +54,7 @@ class TestThatSharedTable : StringSpec({
         result.isFull(date1) shouldBe false
     }
 
-    "should reserve a table at different days"{
+    "should reserve a shared table at different days"{
         val table1 = SharedTable(2)
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val date2 = LocalDate.of(1990, Month.DECEMBER, 1)
@@ -66,5 +66,21 @@ class TestThatSharedTable : StringSpec({
         val resultTable = table2.reserve(date2, Quantity(2))
         resultTable.isFull(date2) shouldBe true
     }
+
+    "should reserve a shared table same day, multi reservation"{
+        val table1 = SharedTable(2)
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
+
+        val table2 = table1.reserve(date1, Quantity(1))
+        table2.isFull(date1) shouldBe false
+
+        table2.canIReserve(date1, Quantity( 1)) shouldBe true
+
+        val resultTable = table2.reserve(date1, Quantity(1))
+        resultTable.isFull(date1) shouldBe true
+
+        resultTable.canIReserve(date1, Quantity(1)) shouldBe false
+    }
+
 
 })
