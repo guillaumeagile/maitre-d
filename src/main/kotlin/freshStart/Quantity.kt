@@ -1,36 +1,28 @@
 package freshStart
 
-data class Quantity(val value_: Int) {
+data class Quantity(val value: Int) {
 
     companion object {
-        fun create(value_: Int): Result<Quantity> {
-            if ((value_ <= 0))
+        fun create(value: Int): Result<Quantity> {
+            if ((value <= 0))
                 return Result.failure(InvalidQuantityForReservation())
-            return Result.success(Quantity(value_))
+            return Result.success(Quantity(value))
         }
     }
 
     override operator fun equals(other: Any?): Boolean {
         if (other is Int)
-            return other.toInt() == value_
+            return other.toInt() == value
         if (other is Quantity)
-            return (other.value_ === this.value_)
+            return (other.value == this.value)
         //    return (other === this)  // ne fonctionne pas!  parce que comme on est en train de redefinir l'égalité,
         //  l'égalité 'par défaut' des data class telle que fabriquée par le compilateur ne fonctionne plus.
         return false
     }
 
-    operator fun plus(quantity: Quantity): Quantity = Quantity(this.value_ + quantity.value_)
-
+    operator fun plus(quantity: Quantity): Quantity = Quantity(this.value + quantity.value)
 
     operator fun compareTo(q1: Quantity): Int {
-        return this.value_ - q1.value_
+        return this.value - q1.value
     }
-
-/*
-     override fun toString(): String {
-         val tostr = super.toString()
-         return "hello{$value_}::{$tostr}"
-         //return super.toString()
-     }*/
 }

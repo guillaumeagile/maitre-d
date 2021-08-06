@@ -1,11 +1,21 @@
 package freshStart.tables
 
+import freshStart.DailySeats
 import freshStart.ITable
+import freshStart.Quantity
+import java.time.LocalDate
 
-class HauteCuisineTable(override val size: Int , val isReserved : Boolean = false) : ITable {
+class HauteCuisineTable(
+    override val size: Int,
+    val dailySeatsOverallReservations: DailySeats,
+    val isReserved: Boolean = false
+) : ITable {
 
-    companion object{
-        fun createTableReservee(size: Int): HauteCuisineTable = HauteCuisineTable(size, true)
+    constructor(size: Int) : this(size, DailySeats())
+
+    companion object {
+        fun createTableReservee(size: Int, dailySeatsOverallReservations: DailySeats): HauteCuisineTable =
+            HauteCuisineTable(size, dailySeatsOverallReservations, true)
     }
 
     override fun isFull(): Boolean {
@@ -13,6 +23,21 @@ class HauteCuisineTable(override val size: Int , val isReserved : Boolean = fals
     }
 
     override fun reserve(): ITable {
-        return createTableReservee(this.size)
+        return createTableReservee(this.size, this.dailySeatsOverallReservations)
     }
+
+    fun reserve(date: LocalDate, qtte: Quantity): HauteCuisineTable {
+        if (canIReserve(date, qtte))
+            return createTableReservee(this.size, this.dailySeatsOverallReservations.addReservation(date, qtte))
+        return this
+    }
+
+    fun canIReserve(date: LocalDate, desiredQuantity: Quantity): Boolean {
+        return unReservedAt(date) && isBigEnoughFor(desiredQuantity)
+    }
+
+    private fun isBigEnoughFor(desiredQuantity: Quantity) = desiredQuantity <= Quantity(size)
+
+    private fun unReservedAt(date: LocalDate) =
+        this.dailySeatsOverallReservations.howManyReservedOn(date) == Quantity(0)
 }

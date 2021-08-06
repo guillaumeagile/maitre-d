@@ -2,23 +2,50 @@ package freshStart
 
 import freshStart.tables.HauteCuisineTable
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 import java.time.LocalDate
 import java.time.Month
 
 class TestThatHauteCuisineTable: StringSpec({
 
-    "should be equal when size is equal" {
+    "should be not equal when size is equal" {
         val tableB: ITable = HauteCuisineTable(1)
         val tableA: ITable = HauteCuisineTable(1)
-        tableA shouldBe tableB  //A CHANGER:  on doit distinguer des tables différentes (mais de mm taille) avec des ID
+        tableA shouldNotBe tableB
     }
 
     "Should refuse reservation on a already reserved table" {
-        val tableA: ITable = HauteCuisineTable(20)
+        val tableA  = HauteCuisineTable(20)
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
 
-        val resultTable =  tableA.reserve(date1, Quantity(1))
-        resultTable.canIReserve(date1, Quantity(1)) shouldBe false
+        val sut =  tableA.reserve(date1, Quantity(1))
+        sut.canIReserve(date1, Quantity(1)) shouldBe false
+        sut.reserve(date1, Quantity(1)) shouldBe sut
+    }
+
+    "Should accept reservation if the table is not reserved" {
+        val sut  = HauteCuisineTable(20)
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
+
+        sut.canIReserve(date1, Quantity(1)) shouldBe true
+    }
+
+    "Should accept reservation if the table is not reserved at antoher date (after the 1st reservation)" {
+        val tableA  = HauteCuisineTable(20)
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 30)
+        val date2 = LocalDate.of(1990, Month.DECEMBER, 31)
+
+        val sut =  tableA.reserve(date1, Quantity(1))
+        sut.canIReserve(date2, Quantity(1)) shouldBe true
+    }
+
+    "Should refuse reservation if the table is big enough for the quantity" {
+        val tableA  = HauteCuisineTable(20)
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 30)
+
+        tableA.canIReserve(date1, Quantity(21)) shouldBe false
+        val sut =  tableA.reserve(date1, Quantity(21))
+        sut shouldBe tableA
     }
 })
