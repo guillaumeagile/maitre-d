@@ -12,7 +12,7 @@ class SharedTable(override val size: Int, val dailySeatsOverallReservations: Dai
         return size <= 0
     }
 
-    fun isFull(date: LocalDate): Boolean {
+    override fun isFull(date: LocalDate): Boolean {
         val quantityOfReservedSeat = dailySeatsOverallReservations.howManyReservedOn(date)
         return (quantityOfReservedSeat.value >= size)
     }
@@ -21,13 +21,13 @@ class SharedTable(override val size: Int, val dailySeatsOverallReservations: Dai
         return this
     }
 
-    fun reserve(date: LocalDate, qtte: Quantity): SharedTable {
+    override fun reserve(date: LocalDate, qtte: Quantity): ITable {
         if (!canIReserve(date, qtte))
             return this
         return SharedTable(size, dailySeatsOverallReservations.addReservation(date, qtte))
     }
 
-    fun canIReserve(date: LocalDate, qtte: Quantity): Boolean {
+    override fun canIReserve(date: LocalDate, qtte: Quantity): Boolean {
         val quantityOfDesiredSeat = dailySeatsOverallReservations.howManyReservedOn(date) + qtte
         return quantityOfDesiredSeat.value <= size
     }

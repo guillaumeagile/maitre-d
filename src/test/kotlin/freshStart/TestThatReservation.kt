@@ -63,6 +63,7 @@ class TestThatReservation : StringSpec({
 
         actualReservation.isFailure shouldBe true
         actualReservation.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
+        //actualReservation.onFailure { e -> e should beInstanceOf<TableAlreadyReserved>() }
     }
 
     "Should have  a quantity enough for the same day" {
@@ -108,6 +109,7 @@ class TestThatReservation : StringSpec({
 
         actualReservation.isFailure shouldBe true
         actualReservation.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
+        //actualReservation.onFailure { e -> e should beInstanceOf<TableAlreadyReserved>() }
     }
 
     "Should  accept reservation for different table size (each MaitreD own its table)" {

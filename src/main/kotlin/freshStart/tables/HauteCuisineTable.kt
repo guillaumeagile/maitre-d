@@ -22,17 +22,21 @@ class HauteCuisineTable(
         return isReserved
     }
 
+    override fun isFull(date: LocalDate): Boolean {
+        TODO("Not yet implemented")
+    }
+
     override fun reserve(): ITable {
         return createTableReservee(this.size, this.dailySeatsOverallReservations)
     }
 
-    fun reserve(date: LocalDate, qtte: Quantity): HauteCuisineTable {
+    override fun reserve(date: LocalDate, qtte: Quantity): ITable {
         if (canIReserve(date, qtte))
             return createTableReservee(this.size, this.dailySeatsOverallReservations.addReservation(date, qtte))
         return this
     }
 
-    fun canIReserve(date: LocalDate, desiredQuantity: Quantity): Boolean {
+    override fun canIReserve(date: LocalDate, desiredQuantity: Quantity): Boolean {
         return unReservedAt(date) && isBigEnoughFor(desiredQuantity)
     }
 
