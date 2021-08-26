@@ -11,7 +11,6 @@ class DailySeats(val dailyAccumulation: Map<LocalDate, Quantity> = mapOf()) {
             )
         )
     }
-
     fun howManyReservedOn(date: LocalDate): Quantity = dailyAccumulation.getOrDefault(date, Quantity(0))
 }
 
