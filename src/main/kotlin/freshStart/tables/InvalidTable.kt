@@ -24,6 +24,6 @@ class InvalidTable(override val size: Int = 0) : ITable {
     }
 
     override fun canIReserve(date: LocalDate, qtte: Quantity): Boolean {
-        TODO("Not yet implemented")
+        TODO()
     }
 }

@@ -1,8 +1,8 @@
 package freshStart
 
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import java.time.LocalDate
 import java.time.Month
 
@@ -31,57 +31,52 @@ class TestThatSharedTable : StringSpec({
         tableA shouldBe tableB
     }
 
-    "should reserve a table"{
+    "should reserve a table" {
         val table1 = SharedTable(2)
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val result = table1.reserve(date1, Quantity(1))
         result.isFull(date1) shouldBe false
     }
 
-
-    "should reserve a table at max capacity"{
+    "should reserve a table at max capacity" {
         val table1 = SharedTable(2)
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val result = table1.reserve(date1, Quantity(2))
         result.isFull(date1) shouldBe true
-
     }
 
-    "a reservation of a table over capacity should not modify the state of the table"{
+    "a reservation of a table over capacity should not modify the state of the table" {
         val table1 = SharedTable(1)
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val result = table1.reserve(date1, Quantity(2))
         result.isFull(date1) shouldBe false
     }
 
-    "should reserve a shared table at different days"{
+    "should reserve a shared table at different days" {
         val table1 = SharedTable(2)
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val date2 = LocalDate.of(1990, Month.DECEMBER, 1)
         val table2 = table1.reserve(date1, Quantity(2))
         table2.isFull(date1) shouldBe true
         table2.isFull(date2) shouldBe false
-        table2.canIReserve(date2, Quantity( 2)) shouldBe true
+        table2.canIReserve(date2, Quantity(2)) shouldBe true
 
         val resultTable = table2.reserve(date2, Quantity(2))
         resultTable.isFull(date2) shouldBe true
     }
 
-    "should reserve a shared table same day, multi reservation"{
+    "should reserve a shared table same day, multi reservation" {
         val table1 = SharedTable(2)
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
 
         val table2 = table1.reserve(date1, Quantity(1))
         table2.isFull(date1) shouldBe false
 
-        table2.canIReserve(date1, Quantity( 1)) shouldBe true
+        table2.canIReserve(date1, Quantity(1)) shouldBe true
 
         val resultTable = table2.reserve(date1, Quantity(1))
         resultTable.isFull(date1) shouldBe true
 
         resultTable.canIReserve(date1, Quantity(1)) shouldBe false
     }
-
-
-
 })

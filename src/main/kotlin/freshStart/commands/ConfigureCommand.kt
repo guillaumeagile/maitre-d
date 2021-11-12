@@ -1,5 +1,3 @@
 package freshStart.commands
 
-class ConfigureCommand( action: String, tableType: String, size: String) : ICommand {
-
-}
+data class ConfigureCommand(val action: String, val tableType: String, val size: String) : ICommand

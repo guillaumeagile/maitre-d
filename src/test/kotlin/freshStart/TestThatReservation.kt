@@ -1,23 +1,23 @@
 package freshStart
 
 import freshStart.tables.HauteCuisineTable
-import io.kotlintest.matchers.*
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.AbstractAnnotationSpec.*
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.beInstanceOf
 import java.time.LocalDate
 import java.time.Month
-import io.kotlintest.specs.AbstractAnnotationSpec.Ignore as Ignore
 
-//import io.kotest.matchers.result
-
+// import io.kotest.matchers.result
 
 class TestThatReservation : StringSpec({
 
-    fun buildMaitreDWithSharedTable(uniqueTableSize: Int) = MaitreD( mutableListOf(SharedTable(uniqueTableSize)))
-    fun buildMaitreDWithOneHauteCuisineTable(uniqueTableSize: Int) = MaitreD( mutableListOf(HauteCuisineTable(uniqueTableSize)))
-    fun buildMaitreDWithTwoHauteCuisineTable(uniqueTableSize: Int) = MaitreD( mutableListOf(HauteCuisineTable(uniqueTableSize), HauteCuisineTable(uniqueTableSize)))
+    fun buildMaitreDWithSharedTable(uniqueTableSize: Int) = MaitreD(mutableListOf(SharedTable(uniqueTableSize)))
+    fun buildMaitreDWithOneHauteCuisineTable(uniqueTableSize: Int) =
+        MaitreD(mutableListOf(HauteCuisineTable(uniqueTableSize)))
+
+    fun buildMaitreDWithTwoHauteCuisineTable(uniqueTableSize: Int) =
+        MaitreD(mutableListOf(HauteCuisineTable(uniqueTableSize), HauteCuisineTable(uniqueTableSize)))
 
     "Should have a date and a quantity" {
         val maitreD = buildMaitreDWithSharedTable(1)
@@ -43,7 +43,7 @@ class TestThatReservation : StringSpec({
         val actualReservation = maitreD.reserve(LocalDate.of(1990, Month.DECEMBER, 15), 13)
 
         actualReservation.isFailure shouldBe true
-        //actualReservation.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
+        // actualReservation.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
     }
 
     "Should have not a negative quantity " {
@@ -63,7 +63,7 @@ class TestThatReservation : StringSpec({
 
         actualReservation.isFailure shouldBe true
         actualReservation.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
-        //actualReservation.onFailure { e -> e should beInstanceOf<TableAlreadyReserved>() }
+        // actualReservation.onFailure { e -> e should beInstanceOf<TableAlreadyReserved>() }
     }
 
     "Should have  a quantity enough for the same day" {
@@ -87,7 +87,7 @@ class TestThatReservation : StringSpec({
         actualReservation.getOrThrow().quantity shouldBe 3
     }
 
-    "Should reserve again after a failing reservation "{
+    "Should reserve again after a failing reservation " {
         val maitreD = buildMaitreDWithSharedTable(3)
         val aDay = LocalDate.of(1990, Month.DECEMBER, 15)
         maitreD.reserve(aDay, 4)
@@ -109,7 +109,7 @@ class TestThatReservation : StringSpec({
 
         actualReservation.isFailure shouldBe true
         actualReservation.onFailure { e -> e should beInstanceOf<NoRoomLeft>() }
-        //actualReservation.onFailure { e -> e should beInstanceOf<TableAlreadyReserved>() }
+        // actualReservation.onFailure { e -> e should beInstanceOf<TableAlreadyReserved>() }
     }
 
     "Should  accept reservation for different table size (each MaitreD own its table)" {
@@ -124,7 +124,7 @@ class TestThatReservation : StringSpec({
         actualReservation2.isSuccess shouldBe true
     }
 
-    "Should refuse reservation on a HauteCuisine table already reserved"    {
+    "Should refuse reservation on a HauteCuisine table already reserved" {
         val maitreD = buildMaitreDWithOneHauteCuisineTable(2)
         val aDay = LocalDate.of(1990, Month.DECEMBER, 15)
 
@@ -147,7 +147,7 @@ class TestThatReservation : StringSpec({
         secondReservation.isSuccess shouldBe true
     }*/
 
-    "should accept 2 x 1 reservation successively because we have 2 x 2 tables"{
+    "should accept 2 x 1 reservation successively because we have 2 x 2 tables" {
         val maitreD = buildMaitreDWithTwoHauteCuisineTable(2)
 
         val aDay = LocalDate.of(1990, Month.DECEMBER, 15)
@@ -158,7 +158,6 @@ class TestThatReservation : StringSpec({
         firstReservation.isSuccess shouldBe true
         secondReservation.isSuccess shouldBe true
     }
-
 
 /*    "Should  accept 2 reservations of 2 and occupied any table of size2" {
         val maitreD = MaitreD(arrayOf(2, 2))

@@ -7,7 +7,7 @@ class MaitreD(val tables: MutableList<ITable>) {
 
     fun reserve(date: LocalDate, numberOfGuests: Int): Result<Reservation> {
         val resultQuantity = Quantity.create(numberOfGuests)
-        var lastObservedTable: ITable? = null;
+        var lastObservedTable: ITable? = null
         return resultQuantity.fold(
             { quantity ->
                 var reservation: Reservation? = null
@@ -15,7 +15,7 @@ class MaitreD(val tables: MutableList<ITable>) {
                     lastObservedTable = currentTable
                     if (!currentTable.canIReserve(date, quantity))
                         continue
-                    reservation = Reservation(date, quantity)   //TODO: ne plus utiliser ?
+                    reservation = Reservation(date, quantity) // A FAIRE: ne plus utiliser ?
                     tables[index] = currentTable.reserve(date, quantity)
                     break
                 }
@@ -25,6 +25,7 @@ class MaitreD(val tables: MutableList<ITable>) {
                     return Result.failure(TableAlreadyReserved())
                 return Result.failure(NoRoomLeft())
             },
-            { _ -> Result.failure(InvalidQuantityForReservation()) })
+            { _ -> Result.failure(InvalidQuantityForReservation()) }
+        )
     }
 }

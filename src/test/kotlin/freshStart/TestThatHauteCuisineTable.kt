@@ -1,9 +1,10 @@
 package freshStart
 
 import freshStart.tables.HauteCuisineTable
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+
 import java.time.LocalDate
 import java.time.Month
 
