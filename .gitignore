@@ -2,6 +2,8 @@ build
 .gradle
 spec_failures
 
+!gradle-wrapper.jar
+
 ### Kotlin ###
 # Compiled class file
 *.class
