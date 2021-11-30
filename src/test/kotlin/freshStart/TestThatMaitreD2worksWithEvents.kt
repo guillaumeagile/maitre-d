@@ -14,7 +14,7 @@ class TestThatMaitreD2worksWithEvents : StringSpec({
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val maitreD2 = MaitreD2(SharedTable(3, DailySeats()))
 
-        val command = ReservationCommand(guestsCount = 5, wishedDate = date1)
+        val command = ReservationCommand(guestsCount = 2, wishedDate = date1)
 
         // ACT
         maitreD2.handle(command)
@@ -37,5 +37,21 @@ class TestThatMaitreD2worksWithEvents : StringSpec({
 
         // ASSERT
         maitreD2.events shouldContain ReservationIsDeclinedOnSharedTable(1)
+    }
+
+    "should be able to reserve a table with maximum available seats" {
+
+        // ARRANGE
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
+
+        val maitreD2 = MaitreD2(SharedTable(3, DailySeats()))
+
+        val command = ReservationCommand(guestsCount = 3, wishedDate = date1)
+
+        // ACT
+        maitreD2.handle(command)
+
+        // ASSERT
+        maitreD2.events shouldContain ReservationIsProposedOnSharedTable(1)
     }
 })

@@ -1,5 +1,5 @@
 package freshStart.events
 
-class ReservationIsDeclinedOnSharedTable(val reservationNumber: Int) : Event {
+data class ReservationIsDeclinedOnSharedTable(val reservationNumber: Int) : Event {
 
 }
