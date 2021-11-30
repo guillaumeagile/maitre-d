@@ -1,6 +1,7 @@
 package freshStart.commands
 
-interface ICommand {
-    fun isValidReservation(leftFreeSeatOnTable: Int): Boolean
+import freshStart.SharedTable
 
+interface ICommand {
+    fun isValidReservation(sharedTable: SharedTable): Boolean
 }
