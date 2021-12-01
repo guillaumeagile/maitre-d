@@ -1,5 +1,7 @@
 package freshStart
 
+import freshStart.errors.InvalidQuantityForReservation
+import freshStart.errors.NoRoomLeft
 import freshStart.tables.HauteCuisineTable
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should

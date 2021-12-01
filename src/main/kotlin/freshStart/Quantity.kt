@@ -1,5 +1,7 @@
 package freshStart
 
+import freshStart.errors.InvalidQuantityForReservation
+
 data class Quantity(val value: Int) {
 
     companion object {

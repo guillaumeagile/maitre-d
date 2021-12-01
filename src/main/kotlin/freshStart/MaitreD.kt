@@ -1,5 +1,8 @@
 package freshStart
 
+import freshStart.errors.InvalidQuantityForReservation
+import freshStart.errors.NoRoomLeft
+import freshStart.errors.TableAlreadyReserved
 import freshStart.tables.HauteCuisineTable
 import java.time.LocalDate
 
