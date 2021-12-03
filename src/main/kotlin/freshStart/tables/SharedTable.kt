@@ -7,9 +7,10 @@ data class SharedTable(override val size: Int, val dailySeatsOverallReservations
 
     companion object {
         fun replayOn(listEvents: Collection<Event>, initialSize: Int): SharedTable {
-            return SharedTable(size=initialSize)
+            return SharedTable(size = initialSize)
         }
     }
+
     constructor(size: Int) : this(size, DailySeats())
 
     override fun equals(other: Any?): Boolean = (other is SharedTable) && (this.size == other.size)

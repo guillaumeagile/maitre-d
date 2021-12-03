@@ -9,14 +9,14 @@ import java.time.Month
 
 class TestThatReplayOnSharedTable : StringSpec({
 
-    "replay with an empty list should let's unchanged the SharedTable" {
+    "with an empty list should let's unchanged the SharedTable" {
         val events: Collection<Event> = setOf<Event>()
         val actual = SharedTable.replayOn(listEvents = events, initialSize = 4)
         val expected = SharedTable(size = 4, dailySeatsOverallReservations = DailySeats())
         actual shouldBe expected
     }
 
-    "Next test red!" {
+    "with ReservationIsConfirmed event should change the SharedTable" {
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val events: Collection<Event> = setOf<Event>().plus(
             ReservationIsConfirmedOnSharedTable(
@@ -32,5 +32,4 @@ class TestThatReplayOnSharedTable : StringSpec({
         )
         actual.dailySeatsOverallReservations.dailyAccumulation.size shouldBe expected.dailySeatsOverallReservations.dailyAccumulation.size
     }
-
 })

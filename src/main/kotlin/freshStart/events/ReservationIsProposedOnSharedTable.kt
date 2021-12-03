@@ -1,11 +1,5 @@
 package freshStart.events
 
-import freshStart.Reservation
+interface Event
 
-interface Event{
-
-}
-
-data class ReservationIsProposedOnSharedTable(val reservationNumber: Int) : Event {
-
-}
+data class ReservationIsProposedOnSharedTable(val reservationNumber: Int) : Event

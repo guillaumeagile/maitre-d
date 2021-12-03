@@ -11,11 +11,11 @@ class MaitreD2(var sharedTable: SharedTable) {
     fun handle(command: ICommand) {
 //        val sharedTable2 = SharedTable.replayOn(listEvents=events, initialSize=sharedTable.size)
         if (command.isValidReservation(sharedTable)) {
-            // eviter la mutation de sharedTable
+            // éviter la mutation de sharedTable
             sharedTable = sharedTable.reserve(
-                date = (command as ReservationCommand).wishedDate,   // eviter le cast pas beau  et la loi de Demeter
-                qtte = Quantity(command.guestsCount)  // respecter la loi de Demeter
-            ) as SharedTable // eviter le cast pas beau
+                date = (command as ReservationCommand).wishedDate, // éviter le cast pas beau et respecter la loi de Demeter
+                qtte = Quantity(command.guestsCount) // respecter la loi de Demeter
+            ) as SharedTable // éviter le cast pas beau
             events = events.plus(ReservationIsProposedOnSharedTable(reservationNumber = 1))
         } else
             events = events.plus(ReservationIsDeclinedOnSharedTable(reservationNumber = 1))
