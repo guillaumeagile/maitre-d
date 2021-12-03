@@ -1,9 +1,15 @@
 package freshStart
 
+import freshStart.events.Event
 import java.time.LocalDate
 
 class SharedTable(override val size: Int, val dailySeatsOverallReservations: DailySeats) : ITable {
 
+    companion object {
+        fun replayOn(listEvents: Collection<Event>, initialSize: Int): SharedTable {
+            return SharedTable(size=initialSize)
+        }
+    }
     constructor(size: Int) : this(size, DailySeats())
 
     override fun equals(other: Any?): Boolean = (other is SharedTable) && (this.size == other.size)
@@ -30,5 +36,9 @@ class SharedTable(override val size: Int, val dailySeatsOverallReservations: Dai
     override fun canIReserve(date: LocalDate, qtte: Quantity): Boolean {
         val quantityOfDesiredSeat = dailySeatsOverallReservations.howManyReservedOn(date) + qtte
         return quantityOfDesiredSeat.value <= size
+    }
+
+    override fun toString(): String {
+        return "size=${this.size}"
     }
 }

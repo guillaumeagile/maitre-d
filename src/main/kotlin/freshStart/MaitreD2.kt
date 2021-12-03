@@ -9,6 +9,7 @@ import freshStart.events.ReservationIsProposedOnSharedTable
 class MaitreD2(var sharedTable: SharedTable) {
     var events: Collection<Event> = setOf<Event>() // TODO : avoir un getter readonly
     fun handle(command: ICommand) {
+//        val sharedTable2 = SharedTable.replayOn(listEvents=events, initialSize=sharedTable.size)
         if (command.isValidReservation(sharedTable)) {
             // eviter la mutation de sharedTable
             sharedTable = sharedTable.reserve(
