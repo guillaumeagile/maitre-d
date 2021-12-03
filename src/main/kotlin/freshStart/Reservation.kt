@@ -2,7 +2,7 @@ package freshStart
 
 import java.time.LocalDate
 
-class DailySeats(val dailyAccumulation: Map<LocalDate, Quantity> = mapOf()) {
+data class DailySeats(val dailyAccumulation: Map<LocalDate, Quantity> = mapOf()) {
     fun addReservation(date: LocalDate, seats: Quantity): DailySeats {
         return DailySeats(
             dailyAccumulation + Pair(

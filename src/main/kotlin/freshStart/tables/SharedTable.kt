@@ -3,7 +3,7 @@ package freshStart
 import freshStart.events.Event
 import java.time.LocalDate
 
-class SharedTable(override val size: Int, val dailySeatsOverallReservations: DailySeats) : ITable {
+data class SharedTable(override val size: Int, val dailySeatsOverallReservations: DailySeats) : ITable {
 
     companion object {
         fun replayOn(listEvents: Collection<Event>, initialSize: Int): SharedTable {
