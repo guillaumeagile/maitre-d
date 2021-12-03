@@ -5,6 +5,7 @@ import freshStart.events.ReservationIsDeclinedOnSharedTable
 import freshStart.events.ReservationIsProposedOnSharedTable
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.shouldBe
 import java.time.LocalDate
 import java.time.Month
 
@@ -40,18 +41,25 @@ class TestThatMaitreD2worksWithEvents : StringSpec({
     }
 
     "should be able to reserve a table with maximum available seats" {
-
         // ARRANGE
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
-
         val maitreD2 = MaitreD2(SharedTable(3, DailySeats()))
-
         val command = ReservationCommand(guestsCount = 3, wishedDate = date1)
-
         // ACT
         maitreD2.handle(command)
-
         // ASSERT
         maitreD2.events shouldContain ReservationIsProposedOnSharedTable(1)
+    }
+
+    "should be able to reserve a table mutliple times same date,   " {
+        // ARRANGE
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
+        val maitreD2 = MaitreD2(SharedTable(3, DailySeats()))
+        val command = ReservationCommand(guestsCount = 2, wishedDate = date1)
+        maitreD2.handle(command)
+        // ACT
+        maitreD2.handle(command)
+        // ASSERT
+        maitreD2.events.last() shouldBe ReservationIsDeclinedOnSharedTable(1)
     }
 })
