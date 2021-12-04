@@ -11,7 +11,10 @@ class TestThatReplayOnSharedTable : StringSpec({
 
     "with an empty list should let's unchanged the SharedTable" {
         val events: Collection<Event> = setOf<Event>()
-        val actual = SharedTable.replayOn(listEvents = events, initialSize = 4)
+        var sut = SharedTable(size = 4)
+
+        val actual = sut.replayOn(listEvents = events)
+
         val expected = SharedTable(size = 4, dailySeatsOverallReservations = DailySeats())
         actual shouldBe expected
     }
@@ -25,7 +28,10 @@ class TestThatReplayOnSharedTable : StringSpec({
                 qtte = Quantity(1)
             )
         )
-        val actual = SharedTable.replayOn(listEvents = events, initialSize = 4)
+
+        var sut = SharedTable(size = 4)
+
+        val actual = sut.replayOn(listEvents = events)
         val expected = SharedTable(
             size = 4,
             dailySeatsOverallReservations = DailySeats().addReservation(date = date1, seats = Quantity(1))
