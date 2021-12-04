@@ -7,8 +7,8 @@ import java.time.LocalDate
 data class SharedTable(override val size: Int, val dailySeatsOverallReservations: DailySeats) : ITable {
 
     fun replayOn(listEvents: Collection<Event>): SharedTable {
+        var newDailySeats = DailySeats()
         if (listEvents.any { it is ReservationIsConfirmedOnSharedTable }) {
-            var newDailySeats = this.dailySeatsOverallReservations
             listEvents.filter { it is ReservationIsConfirmedOnSharedTable }.forEach {
                 newDailySeats = newDailySeats.addReservation(
                     (it as ReservationIsConfirmedOnSharedTable).date,
