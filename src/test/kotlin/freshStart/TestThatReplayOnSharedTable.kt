@@ -2,6 +2,7 @@ package freshStart
 
 import freshStart.events.Event
 import freshStart.events.ReservationIsConfirmedOnSharedTable
+import freshStart.events.ReservationIsDeclinedOnSharedTable
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import java.time.LocalDate
@@ -71,4 +72,36 @@ class TestThatReplayOnSharedTable : StringSpec({
         )
         actual.dailySeatsOverallReservations shouldBe expected.dailySeatsOverallReservations
     }
+
+    "rename me!!!" {
+        // Arrange
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
+
+        val events = setOf(
+            ReservationIsConfirmedOnSharedTable(
+                reservationNumber = 1,
+                date = date1,
+                qtte = Quantity(2)
+            ),
+            ReservationIsDeclinedOnSharedTable(
+                reservationNumber = 99
+            )
+        )
+        val sut = SharedTable(size = 4)
+
+        // Act
+        val actual = sut.replayOn(listEvents = events)
+
+        // Assert
+        var expectedTotalDailySeats = DailySeats()
+        expectedTotalDailySeats = expectedTotalDailySeats.addReservation(date = date1, seats = Quantity(2))
+        val expected = SharedTable(
+            size = 4,
+            dailySeatsOverallReservations = expectedTotalDailySeats
+        )
+        actual.dailySeatsOverallReservations shouldBe expected.dailySeatsOverallReservations
+    }
+
 })
+
+
