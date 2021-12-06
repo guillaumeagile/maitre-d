@@ -7,12 +7,12 @@ import freshStart.events.ReservationIsConfirmedOnSharedTable
 import freshStart.events.ReservationIsDeclinedOnSharedTable
 import freshStart.events.ReservationIsProposedOnSharedTable
 
-class MaitreD2(val sharedTable: SharedTable) {
+class MaitreD2(val sharedTableInInitialState: SharedTable) {
     var events: Collection<Event> = setOf<Event>() // TODO : avoir un getter readonly
     fun handle(command: ICommand) {
-        val newSharedTable = sharedTable.replayOn(listEvents = events)
-        if (command.isValidReservation(sharedTable)) {
-            newSharedTable.reserve(
+        val sharedTableCurrentState = sharedTableInInitialState.replayOn(listEvents = events)
+        if (command.isValidReservation(sharedTableCurrentState)) {
+            sharedTableCurrentState.reserve(
                 date = (command as ReservationCommand).wishedDate, // éviter le cast pas beau et respecter la loi de Demeter
                 qtte = Quantity(command.guestsCount) // respecter la loi de Demeter
             )

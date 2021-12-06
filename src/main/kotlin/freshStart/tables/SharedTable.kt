@@ -16,7 +16,6 @@ data class SharedTable(override val size: Int, val dailySeatsOverallReservations
             )
         }
         return SharedTable(size = this.size, newDailySeats)
-
     }
 
     constructor(size: Int) : this(size, DailySeats())

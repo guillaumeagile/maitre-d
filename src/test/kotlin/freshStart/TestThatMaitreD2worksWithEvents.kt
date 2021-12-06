@@ -1,6 +1,7 @@
 package freshStart
 
 import freshStart.commands.ReservationCommand
+import freshStart.events.ReservationIsConfirmedOnSharedTable
 import freshStart.events.ReservationIsDeclinedOnSharedTable
 import freshStart.events.ReservationIsProposedOnSharedTable
 import io.kotest.core.spec.style.StringSpec
@@ -51,16 +52,56 @@ class TestThatMaitreD2worksWithEvents : StringSpec({
         maitreD2.events shouldContain ReservationIsProposedOnSharedTable(1)
     }
 
-    "should be able to reserve a table mutliple times same date,   " {
+    "should not be able to reserve a table mutliple times same date, if the size of the table is reached" {
         // ARRANGE
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val maitreD2 = MaitreD2(SharedTable(3, DailySeats()))
         val command = ReservationCommand(guestsCount = 2, wishedDate = date1)
+        val command2 = ReservationCommand(guestsCount = 3, wishedDate = date1)
         maitreD2.handle(command)
         // ACT
-        maitreD2.handle(command)
+        maitreD2.handle(command2)
         // ASSERT
-        // FIXME: à corriger suite au refacto introduisant le val sur sharedTable au sein de MaitreD
         maitreD2.events.last() shouldBe ReservationIsDeclinedOnSharedTable(1)
+    }
+
+    "should be able to reserve a table mutliple times same date, if the size of the table is ok" {
+        // ARRANGE
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
+        val maitreD2 = MaitreD2(SharedTable(3, DailySeats()))
+        val command = ReservationCommand(guestsCount = 2, wishedDate = date1)
+        val command2 = ReservationCommand(guestsCount = 1, wishedDate = date1)
+        maitreD2.handle(command)
+        // ACT
+        maitreD2.handle(command2)
+        // ASSERT
+        maitreD2.events.last() shouldBe ReservationIsConfirmedOnSharedTable(
+            reservationNumber = 1,
+            date = date1,
+            qtte = Quantity(1)
+        )
+    }
+
+    "should be able to reserve a table mutliple times at different dates, if the size of the table is ok" {
+        // ARRANGE
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
+        val date2 = LocalDate.of(1990, Month.DECEMBER, 30)
+        val maitreD2 = MaitreD2(SharedTable(3, DailySeats()))
+        val command = ReservationCommand(guestsCount = 3, wishedDate = date1)
+        val command2 = ReservationCommand(guestsCount = 3, wishedDate = date2)
+        maitreD2.handle(command)
+        maitreD2.events.last() shouldBe ReservationIsConfirmedOnSharedTable(
+            reservationNumber = 1,
+            date = date1,
+            qtte = Quantity(3)
+        )
+        // ACT
+        maitreD2.handle(command2)
+        // ASSERT
+        maitreD2.events.last() shouldBe ReservationIsConfirmedOnSharedTable(
+            reservationNumber = 1,
+            date = date2,
+            qtte = Quantity(3)
+        )
     }
 })
