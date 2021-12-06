@@ -60,6 +60,7 @@ class TestThatMaitreD2worksWithEvents : StringSpec({
         // ACT
         maitreD2.handle(command)
         // ASSERT
+        // FIXME: à corriger suite au refacto introduisant le val sur sharedTable au sein de MaitreD
         maitreD2.events.last() shouldBe ReservationIsDeclinedOnSharedTable(1)
     }
 })
