@@ -3,7 +3,6 @@ package freshStart
 import freshStart.events.Event
 import freshStart.events.ReservationIsConfirmedOnSharedTable
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import java.time.LocalDate
 import java.time.Month
@@ -59,20 +58,15 @@ class TestThatReplayOnSharedTable : StringSpec({
         )
         var sut = SharedTable(size = 4)
         val actual = sut.replayOn(listEvents = events)
-        var totalDailySeats = DailySeats()
-        totalDailySeats = totalDailySeats.addReservation(date = date1, seats = Quantity(1))
-        totalDailySeats = totalDailySeats.addReservation(date = date2, seats = Quantity(3))
+        var expectedTotalDailySeats = DailySeats()
+        expectedTotalDailySeats = expectedTotalDailySeats.addReservation(date = date1, seats = Quantity(1))
+        expectedTotalDailySeats = expectedTotalDailySeats.addReservation(date = date2, seats = Quantity(3))
         val expected = SharedTable(
             size = 4,
-            dailySeatsOverallReservations = totalDailySeats
+            dailySeatsOverallReservations = expectedTotalDailySeats
         )
-        actual.dailySeatsOverallReservations.dailyAccumulation.toList().size shouldBe expected.dailySeatsOverallReservations.dailyAccumulation.toList().size
-        actual.dailySeatsOverallReservations.dailyAccumulation.toList().first().first shouldBe date1
-        actual.dailySeatsOverallReservations.dailyAccumulation.toList().first().second shouldBe 1
-        actual.dailySeatsOverallReservations.dailyAccumulation.toList().last().first shouldBe date2
-        actual.dailySeatsOverallReservations.dailyAccumulation.toList().last().second shouldBe 3
 
-        actual.dailySeatsOverallReservations.dailyAccumulation shouldBe expected.dailySeatsOverallReservations.dailyAccumulation
+
         actual.dailySeatsOverallReservations shouldBe expected.dailySeatsOverallReservations
     }
 })
