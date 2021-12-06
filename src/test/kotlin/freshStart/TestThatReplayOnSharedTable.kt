@@ -40,24 +40,28 @@ class TestThatReplayOnSharedTable : StringSpec({
     }
 
     "with 2  ReservationIsConfirmed event should change the SharedTable" {
+        // Arrange
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val date2 = LocalDate.of(1990, Month.DECEMBER, 2)
-        var events: Collection<Event> = setOf<Event>().plus(
+
+        val events = setOf(
             ReservationIsConfirmedOnSharedTable(
                 reservationNumber = 1,
                 date = date1,
                 qtte = Quantity(1)
-            )
-        )
-        events = events.plus(
+            ),
             ReservationIsConfirmedOnSharedTable(
                 reservationNumber = 1,
                 date = date2,
                 qtte = Quantity(3)
             )
         )
-        var sut = SharedTable(size = 4)
+        val sut = SharedTable(size = 4)
+
+        // Act
         val actual = sut.replayOn(listEvents = events)
+
+        // Assert
         var expectedTotalDailySeats = DailySeats()
         expectedTotalDailySeats = expectedTotalDailySeats.addReservation(date = date1, seats = Quantity(1))
         expectedTotalDailySeats = expectedTotalDailySeats.addReservation(date = date2, seats = Quantity(3))
@@ -65,8 +69,6 @@ class TestThatReplayOnSharedTable : StringSpec({
             size = 4,
             dailySeatsOverallReservations = expectedTotalDailySeats
         )
-
-
         actual.dailySeatsOverallReservations shouldBe expected.dailySeatsOverallReservations
     }
 })
