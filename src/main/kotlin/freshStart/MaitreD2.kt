@@ -37,6 +37,5 @@ class MaitreD2(val sharedTableInInitialState: SharedTable) {
         } else {
             events = events.plus(ReservationIsDeclinedOnSharedTable(reservationNumber = 1))
         }
-        // envoyer un évènement pour liberer la transaction?
     }
 }
