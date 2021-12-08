@@ -12,7 +12,7 @@ class TestThatReplayOnSharedTable : StringSpec({
 
     "with an empty list should let's unchanged the SharedTable" {
         val events: Collection<Event> = setOf<Event>()
-        var sut = SharedTable(size = 4)
+        val sut = SharedTable(size = 4)
 
         val actual = sut.replayOn(listEvents = events)
 
@@ -30,17 +30,17 @@ class TestThatReplayOnSharedTable : StringSpec({
             )
         )
 
-        var sut = SharedTable(size = 4)
+        val sut = SharedTable(size = 4)
 
         val actual = sut.replayOn(listEvents = events)
         val expected = SharedTable(
             size = 4,
             dailySeatsOverallReservations = DailySeats().addReservation(date = date1, seats = Quantity(1))
         )
-        actual.dailySeatsOverallReservations.dailyAccumulation.size shouldBe expected.dailySeatsOverallReservations.dailyAccumulation.size
+        actual shouldBe expected
     }
 
-    "with 2  ReservationIsConfirmed event should change the SharedTable" {
+    "with 2 ReservationIsConfirmed event should change the SharedTable" {
         // Arrange
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val date2 = LocalDate.of(1990, Month.DECEMBER, 2)
@@ -63,14 +63,14 @@ class TestThatReplayOnSharedTable : StringSpec({
         val actual = sut.replayOn(listEvents = events)
 
         // Assert
-        var expectedTotalDailySeats = DailySeats()
-        expectedTotalDailySeats = expectedTotalDailySeats.addReservation(date = date1, seats = Quantity(1))
-        expectedTotalDailySeats = expectedTotalDailySeats.addReservation(date = date2, seats = Quantity(3))
+        val expectedTotalDailySeats = DailySeats()
+            .addReservation(date = date1, seats = Quantity(1))
+            .addReservation(date = date2, seats = Quantity(3))
         val expected = SharedTable(
             size = 4,
             dailySeatsOverallReservations = expectedTotalDailySeats
         )
-        actual.dailySeatsOverallReservations shouldBe expected.dailySeatsOverallReservations
+        actual shouldBe expected
     }
 
     "rename me!!!" {
@@ -93,13 +93,12 @@ class TestThatReplayOnSharedTable : StringSpec({
         val actual = sut.replayOn(listEvents = events)
 
         // Assert
-        var expectedTotalDailySeats = DailySeats()
-        expectedTotalDailySeats = expectedTotalDailySeats.addReservation(date = date1, seats = Quantity(2))
+        val expectedTotalDailySeats = DailySeats().addReservation(date = date1, seats = Quantity(2))
         val expected = SharedTable(
             size = 4,
             dailySeatsOverallReservations = expectedTotalDailySeats
         )
-        actual.dailySeatsOverallReservations shouldBe expected.dailySeatsOverallReservations
+        actual shouldBe expected
     }
 
 })

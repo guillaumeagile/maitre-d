@@ -20,8 +20,6 @@ data class SharedTable(override val size: Int, val dailySeatsOverallReservations
 
     constructor(size: Int) : this(size, DailySeats())
 
-    override fun equals(other: Any?): Boolean = (other is SharedTable) && (this.size == other.size)
-
     override fun isFull(): Boolean {
         return size <= 0
     }
