@@ -16,12 +16,12 @@ class MaitreD2(val sharedTableInInitialState: SharedTable) {
     fun handle(command: ICommand) {
 
         val sharedTableCurrentState = sharedTableInInitialState.replayOn(listEvents = events)
-        if (command.isValidReservation(sharedTableCurrentState)) { // FIXME: ce n'est pas à la commande de valider la réservation
-            //  mais plutôt à la table de valider la commande
-            sharedTableCurrentState.reserve(
-                date = (command as ReservationCommand).wishedDate, // éviter le cast pas beau et respecter la loi de Demeter
-                qtte = Quantity(command.guestsCount) // respecter la loi de Demeter
+        val reservationCommand = (command as ReservationCommand)
+        if (sharedTableCurrentState.canIReserve(
+                date = reservationCommand.wishedDate,
+                qtte = Quantity(reservationCommand.guestsCount)
             )
+        ) {
             events = events.plus(ReservationIsProposedOnSharedTable(reservationNumber = 1))
             events = events.plus(
                 ReservationIsConfirmedOnSharedTable(

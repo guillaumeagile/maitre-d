@@ -1,6 +1,7 @@
 package freshStart
 
 import freshStart.events.Event
+import freshStart.events.ReservationIsCancelOnSharedTable
 import freshStart.events.ReservationIsConfirmedOnSharedTable
 import freshStart.events.ReservationIsDeclinedOnSharedTable
 import io.kotest.core.spec.style.StringSpec
@@ -97,6 +98,33 @@ class TestThatReplayOnSharedTable : StringSpec({
         val expected = SharedTable(
             size = 4,
             dailySeatsOverallReservations = expectedTotalDailySeats
+        )
+        actual shouldBe expected
+    }
+
+    "new event cancel" {
+        // Arrange
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
+
+        val events = setOf(
+            ReservationIsConfirmedOnSharedTable(
+                reservationNumber = 1,
+                date = date1,
+                qtte = Quantity(2)
+            ),
+            ReservationIsCancelOnSharedTable(
+                reservationNumber = 1
+            )
+        )
+        val sut = SharedTable(size = 4)
+
+        // Act
+        val actual = sut.replayOn(listEvents = events)
+
+        // Assert
+        val expected = SharedTable(
+            size = 4,
+            dailySeatsOverallReservations = DailySeats()
         )
         actual shouldBe expected
     }
