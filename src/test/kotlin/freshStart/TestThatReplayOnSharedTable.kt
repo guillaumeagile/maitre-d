@@ -73,7 +73,7 @@ class TestThatReplayOnSharedTable : StringSpec({
         actual shouldBe expected
     }
 
-    "rename me!!!" {
+    "event reservationIsDeclinedOnSharedTable should be ignore by replay" {
         // Arrange
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
 

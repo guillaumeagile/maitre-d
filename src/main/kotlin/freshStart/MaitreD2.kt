@@ -9,9 +9,12 @@ import freshStart.events.ReservationIsProposedOnSharedTable
 
 class MaitreD2(val sharedTableInInitialState: SharedTable) {
 
-    var events: Collection<Event> = setOf<Event>()
+    var events: Collection<Event> =
+        setOf<Event>() // les archiver dans un autre système pour des stats => reporting..., pour la compta... (Read ONLY)
+    // l'Audit est gratuit
 
     fun handle(command: ICommand) {
+
         val sharedTableCurrentState = sharedTableInInitialState.replayOn(listEvents = events)
         if (command.isValidReservation(sharedTableCurrentState)) { // FIXME: ce n'est pas à la commande de valider la réservation
             //  mais plutôt à la table de valider la commande
@@ -26,6 +29,7 @@ class MaitreD2(val sharedTableInInitialState: SharedTable) {
                     date = command.wishedDate,
                     qtte = Quantity(command.guestsCount)
                 )
+
             )
         } else {
             events = events.plus(ReservationIsDeclinedOnSharedTable(reservationNumber = 1))
