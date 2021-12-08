@@ -3,7 +3,6 @@ package freshStart
 import freshStart.commands.ReservationCommand
 import freshStart.events.ReservationIsConfirmedOnSharedTable
 import freshStart.events.ReservationIsDeclinedOnSharedTable
-import freshStart.events.ReservationIsProposedOnSharedTable
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.shouldBe
@@ -22,7 +21,7 @@ class TestThatMaitreD2worksWithEvents : StringSpec({
         maitreD2.handle(command)
 
         // ASSERT
-        maitreD2.events shouldContain ReservationIsProposedOnSharedTable(1)
+        maitreD2.events shouldContain ReservationIsConfirmedOnSharedTable(1, date = date1, qtte = Quantity(2))
     }
 /*   A REPRENDRE APRES AVOIR FAIT LES TESTS DE LA COMMANDE 'CONFIGURATION' */
     "une commande de réservation  est refusée car le nombre de convives demandé est supérieur à la capacité" {
@@ -49,7 +48,7 @@ class TestThatMaitreD2worksWithEvents : StringSpec({
         // ACT
         maitreD2.handle(command)
         // ASSERT
-        maitreD2.events shouldContain ReservationIsProposedOnSharedTable(1)
+        maitreD2.events shouldContain ReservationIsConfirmedOnSharedTable(1, date = date1, qtte = Quantity(3))
     }
 
     "should not be able to reserve a table mutliple times same date, if the size of the table is reached" {

@@ -5,7 +5,6 @@ import freshStart.commands.ReservationCommand
 import freshStart.events.Event
 import freshStart.events.ReservationIsConfirmedOnSharedTable
 import freshStart.events.ReservationIsDeclinedOnSharedTable
-import freshStart.events.ReservationIsProposedOnSharedTable
 
 class MaitreD2(val sharedTableInInitialState: SharedTable) {
 
@@ -17,22 +16,28 @@ class MaitreD2(val sharedTableInInitialState: SharedTable) {
 
         val sharedTableCurrentState = sharedTableInInitialState.replayOn(listEvents = events)
         val reservationCommand = (command as ReservationCommand)
+        // IDEE: donner une version de la ressource à modifer
         if (sharedTableCurrentState.canIReserve(
                 date = reservationCommand.wishedDate,
                 qtte = Quantity(reservationCommand.guestsCount)
             )
         ) {
-            events = events.plus(ReservationIsProposedOnSharedTable(reservationNumber = 1))
+            // que se passerait il si un autre évènement similaire passe avant celui ci? (accès concurrent)
+            // pour s'en prémunir, on incrémente la version de la ressource dans l'évènement au moment de
+            // l'enregistrment de l'event, et on verifié qu' il n'existe une version égale déjà présente dans les 
+            // évènements passés
             events = events.plus(
                 ReservationIsConfirmedOnSharedTable(
                     reservationNumber = 1,
                     date = command.wishedDate,
                     qtte = Quantity(command.guestsCount)
                 )
-
             )
+            // l'ajout de l'évènement sera être rejeté si un autre evenement de même type
+            // a été trouvé pour le même ID de ressource avec une version égale ou supérieure
         } else {
             events = events.plus(ReservationIsDeclinedOnSharedTable(reservationNumber = 1))
         }
+        // envoyer un évènement pour liberer la transaction?
     }
 }
