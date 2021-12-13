@@ -102,7 +102,7 @@ class TestThatReplayOnSharedTable : StringSpec({
         actual shouldBe expected
     }
 
-    "new event cancel" {
+    "new event cancel".config(enabled = false) {
         // Arrange
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
 

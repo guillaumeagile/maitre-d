@@ -1,6 +1,7 @@
 package freshStart
 
 import freshStart.events.Event
+import freshStart.events.ReservationIsCancelOnSharedTable
 import freshStart.events.ReservationIsConfirmedOnSharedTable
 import java.time.LocalDate
 
@@ -15,6 +16,7 @@ data class SharedTable(override val size: Int, val dailySeatsOverallReservations
                 it.qtte
             )
         }
+
         return SharedTable(size = this.size, newDailySeats)
     }
 
