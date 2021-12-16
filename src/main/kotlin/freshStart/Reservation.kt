@@ -4,7 +4,7 @@ import java.time.LocalDate
 
 data class DailySeats(
     val dailyAccumulation: Map<LocalDate, Quantity> = mapOf(),
-    val dailyAccumulation2: Map<LocalDate, Pair<Int, Quantity>> = mapOf()
+    val dailyAccumulation2: Map<LocalDate, List<Pair<Int, Quantity>>> = mapOf()
 ) {
 
 
@@ -18,8 +18,9 @@ data class DailySeats(
     }
 
     fun addReservation(date: LocalDate, seats: Quantity, reservationNumber: Int): DailySeats {
+        val newListAtDate = dailyAccumulation2.getOrDefault(date, emptyList()) + Pair(reservationNumber, seats)
         return DailySeats(
-            dailyAccumulation, dailyAccumulation2 + Pair(date, Pair(reservationNumber, seats))
+            dailyAccumulation, dailyAccumulation2 + Pair(date, newListAtDate)
         )
     }
 
@@ -28,7 +29,10 @@ data class DailySeats(
 
 
     fun howManyReservedOnBis(date: LocalDate): Quantity {
-        return dailyAccumulation2.getOrDefault(date, Pair(0, Quantity(value = 99))).second
+//        if (!dailyAccumulation2.containsKey(date)) return Quantity(value = 0)
+//        return dailyAccumulation2.getOrDefault(date, emptyList()).reduce { acc, next -> Pair(acc.first, acc.second + next.second)}.second
+        return dailyAccumulation2.getOrDefault(date, emptyList()).fold(Quantity(0)) { acc, next -> acc + next.second }
+
     }
 
 }
