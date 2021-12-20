@@ -12,7 +12,7 @@ import java.time.Month
 
 // import io.kotest.matchers.result
 
-class TestThatReservation : StringSpec({
+class TestThatReservationsAreHandledByMaitreD : StringSpec({
 
     fun buildMaitreDWithSharedTable(uniqueTableSize: Int) = MaitreD(mutableListOf(SharedTable(uniqueTableSize)))
     fun buildMaitreDWithOneHauteCuisineTable(uniqueTableSize: Int) =

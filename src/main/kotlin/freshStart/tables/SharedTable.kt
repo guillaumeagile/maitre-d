@@ -9,12 +9,15 @@ data class SharedTable(override val size: Int, val dailySeatsOverallReservations
 
     fun replayOn(listEvents: Collection<Event>): SharedTable {
         var newDailySeats = DailySeats()
-
         listEvents.filterIsInstance<ReservationIsConfirmedOnSharedTable>().forEach {
             newDailySeats = newDailySeats.addReservation(
                 it.date,
-                it.qtte
+                it.qtte,
+                it.reservationNumber
             )
+        }
+        listEvents.filterIsInstance<ReservationIsCancelOnSharedTable>().forEach {
+            newDailySeats = newDailySeats.removeReservation(it.reservationNumber)
         }
 
         return SharedTable(size = this.size, newDailySeats)

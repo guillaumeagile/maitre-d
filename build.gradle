@@ -26,7 +26,6 @@ repositories {
 ext {
     slf4jVersion = "1.7.26"
     assertjVersion = "3.12.2"
-    kotlintestVersion = "3.3.2"
     kotestVersion = "4.6.3"
 }
 
