@@ -34,13 +34,14 @@ class TestThatSharedTable : StringSpec({
 
     "should not be equal when reservation have different dates" {
         val dateB = LocalDate.of(1990, Month.DECEMBER, 31)
-        val dailySeatsTableB = DailySeats().addReservation(date = dateB, seats = Quantity(2))
-        val tableB: ITable = SharedTable(size=6, dailySeatsOverallReservations = dailySeatsTableB)
+        val tableB: ITable = SharedTable(size=6, dailySeatsOverallReservations = DailySeats())
+        val sutB = tableB.reserve(date=dateB, qtte = Quantity(2))
 
         val dateA = LocalDate.of(1970, Month.MARCH, 2)
-        val dailySeatsTableA = DailySeats().addReservation(date = dateA, seats = Quantity(2))
-        val tableA: ITable = SharedTable(size = 6, dailySeatsOverallReservations = dailySeatsTableA)
-        tableA shouldNotBe tableB
+        val tableA: ITable = SharedTable(size = 6, dailySeatsOverallReservations = DailySeats())
+        val sutA = tableA.reserve(date=dateA, qtte = Quantity(2))
+
+        sutA shouldNotBe sutB
     }
 
     "should reserve a table" {

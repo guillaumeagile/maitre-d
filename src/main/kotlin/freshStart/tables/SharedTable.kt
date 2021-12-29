@@ -41,7 +41,7 @@ data class SharedTable(override val size: Int, val dailySeatsOverallReservations
     override fun reserve(date: LocalDate, qtte: Quantity): ITable {
         if (!canIReserve(date, qtte))
             return this
-        return SharedTable(size, dailySeatsOverallReservations.addReservation(date, qtte))
+        return SharedTable(size, dailySeatsOverallReservations.addReservationOld(date, qtte))
     }
 
     override fun canIReserve(date: LocalDate, qtte: Quantity): Boolean {

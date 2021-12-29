@@ -32,7 +32,7 @@ class HauteCuisineTable(
 
     override fun reserve(date: LocalDate, qtte: Quantity): ITable {
         if (canIReserve(date, qtte))
-            return createTableReservee(this.size, this.dailySeatsOverallReservations.addReservation(date, qtte))
+            return createTableReservee(this.size, this.dailySeatsOverallReservations.addReservationOld(date, qtte))
         return this
     }
 

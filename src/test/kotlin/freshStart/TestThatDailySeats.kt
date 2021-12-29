@@ -37,4 +37,15 @@ class TestThatDailySeats : StringSpec({
         sut.howManyReservedOnBis(date = date1) shouldBe 0
     }
 
+
+
+    "ok" {
+        val dailySeats = DailySeats()
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
+
+        val sut = dailySeats.addReservation(date = date1, seats = Quantity(2), reservationNumber = 4)
+
+        sut.howManyReservedOnBis(date = date1) shouldBe 2
+    }
+
 })

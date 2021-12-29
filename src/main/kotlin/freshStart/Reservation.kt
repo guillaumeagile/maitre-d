@@ -15,6 +15,16 @@ data class DailySeats(
         )
     }
 
+    @Deprecated("refactoring à finir")
+    fun addReservationOld(date: LocalDate, seats: Quantity): DailySeats {
+        return DailySeats(
+            dailyAccumulation + Pair(
+                date,
+                seats + this.dailyAccumulation.getOrDefault(date, Quantity(0))
+            )
+        )
+    }
+
     @Deprecated("à enlever par refacto avec howManyReservedOnBis")
     fun howManyReservedOn(date: LocalDate): Quantity = dailyAccumulation.getOrDefault(date, Quantity(0))
 
@@ -36,16 +46,6 @@ data class DailySeats(
                 .minus(entryDeLaReservationASupprimer)
                 .associateBy(keySelector = { it.key }, valueTransform = { it.value })
         return DailySeats(dailyAccumulation, dailyAccumulation2new)
-    }
-
-    @Deprecated("refactoring à finir")
-    fun addReservation(date: LocalDate, seats: Quantity): DailySeats {
-        return DailySeats(
-            dailyAccumulation + Pair(
-                date,
-                seats + this.dailyAccumulation.getOrDefault(date, Quantity(0))
-            )
-        )
     }
 }
 
