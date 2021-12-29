@@ -1,5 +1,10 @@
 # Maître d' kata
 
+## TODO
+1. Prochaine étape remonter le reservation number dans les méthode reserve(...)
+2. continuer en produisant ce numéro de reservation (à faire porter par un truc => SRP)
+3. ce numéro de réservation doit probablement apparaitre dans les événements 
+
 ## Énoncé
 [Sujet original de Mark Seemann](https://blog.ploeh.dk/2020/01/27/the-maitre-d-kata/)
 
