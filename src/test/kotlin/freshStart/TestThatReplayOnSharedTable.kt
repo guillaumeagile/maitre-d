@@ -20,7 +20,7 @@ class TestThatReplayOnSharedTable : StringSpec({
 
         val expected = SharedTable(size = 4, dailySeatsOverallReservations = DailySeats())
         actual shouldBe expected
-        actual.dailySeatsOverallReservations.howManyReservedOnBis(date1) shouldBe 0
+        actual.dailySeatsOverallReservations.howManyReservedOn(date1) shouldBe 0
     }
 
     "with ReservationIsConfirmed event should change the SharedTable" {
@@ -39,7 +39,7 @@ class TestThatReplayOnSharedTable : StringSpec({
         // TODO: law of demeter:  écrire une méthode qui vérifie que la résa #X est bien à la date D
         actual.dailySeatsOverallReservations.dailyAccumulation.containsKey(date1) shouldBe true
         actual.dailySeatsOverallReservations.dailyAccumulation[date1]!!.first().first shouldBe 99
-        actual.dailySeatsOverallReservations.howManyReservedOnBis(date1) shouldBe Quantity(1)
+        actual.dailySeatsOverallReservations.howManyReservedOn(date1) shouldBe Quantity(1)
     }
 
     "with 2 ReservationIsConfirmed event should change the SharedTable" {

@@ -2,7 +2,6 @@ package freshStart
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import java.time.LocalDate
 import java.time.Month
 
@@ -16,7 +15,7 @@ class TestThatDailySeats : StringSpec({
 
         val sut = dailySeats.addReservation(date = date1, seats = Quantity(value = 3), reservationNumber = 1)
 
-        sut.howManyReservedOnBis(date = date1) shouldBe 3
+        sut.howManyReservedOn(date = date1) shouldBe 3
     }
 
     "howManyReservedOnBis at date should sum of all quantities reservation" {
@@ -26,7 +25,7 @@ class TestThatDailySeats : StringSpec({
         val sut = dailySeats.addReservation(date = date1, seats = Quantity(value = 3), reservationNumber = 1)
         val sut2 = sut.addReservation(date = date1, seats = Quantity(value = 2), reservationNumber = 2)
 
-        sut2.howManyReservedOnBis(date = date1) shouldBe 3 + 2
+        sut2.howManyReservedOn(date = date1) shouldBe 3 + 2
     }
 
     "An empty DailySeats return zero for any date" {
@@ -34,7 +33,7 @@ class TestThatDailySeats : StringSpec({
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
 
 
-        sut.howManyReservedOnBis(date = date1) shouldBe 0
+        sut.howManyReservedOn(date = date1) shouldBe 0
     }
 
 
@@ -45,7 +44,7 @@ class TestThatDailySeats : StringSpec({
 
         val sut = dailySeats.addReservation(date = date1, seats = Quantity(2), reservationNumber = 4)
 
-        sut.howManyReservedOnBis(date = date1) shouldBe 2
+        sut.howManyReservedOn(date = date1) shouldBe 2
     }
 
 })

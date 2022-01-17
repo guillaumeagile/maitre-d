@@ -15,15 +15,10 @@ data class DailySeats(
     }
 
 
-
-    @Deprecated("à enlever par refacto avec howManyReservedOnBis")
-    fun howManyReservedOn(date: LocalDate): Quantity = howManyReservedOnBis(date = date)
-
-    fun howManyReservedOnBis(date: LocalDate): Quantity =
+    fun howManyReservedOn(date: LocalDate): Quantity =
         dailyAccumulation.getOrDefault(date, emptyList()).map { it.second }
             .fold(Quantity(0)) { acc, next -> acc + next }
 
-    // TODO (en dernier)!  https://www.baeldung.com/kotlin/immutable-collections
 
     fun removeReservation(reservationNumber: NumeroDeReservation): DailySeats {
         if (dailyAccumulation.entries.isEmpty())
