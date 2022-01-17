@@ -34,5 +34,3 @@ data class DailySeats(
         return DailySeats(dailyAccumulation2new)
     }
 }
-
-data class Reservation(val date: LocalDate, val quantity: Quantity)
