@@ -7,6 +7,11 @@
 4. Passer en collections réellement immutable  https://www.baeldung.com/kotlin/immutable-collections
 
 
+option 1) nom du client <=> id du client et horodatage de la réservation 
+option 2) id de la réservation est généré par le système => est généré un événement avec le numéro de réservation
+option 2bis) id de la réservation est généré par le système & une feature de recherche des id de réservation par nom de client sur une plage de dates
+
+
 ## Énoncé
 [Sujet original de Mark Seemann](https://blog.ploeh.dk/2020/01/27/the-maitre-d-kata/)
 

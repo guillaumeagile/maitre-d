@@ -103,4 +103,24 @@ class TestThatMaitreD2worksWithEvents : StringSpec({
             qtte = Quantity(3)
         )
     }
+
+    "after one command reservation the event ReservationIsConfirmedOnSharedTable is present for the right customer"{
+            // ARRANGE
+            val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
+            val maitreD2 = MaitreD2(SharedTable(7, DailySeats()))
+            val command = ReservationCommand(guestsCount = 1, wishedDate = date1, customerName = "John")
+
+            //ACT
+            maitreD2.handle(command)
+
+            //ASSERT
+            maitreD2.events.last() shouldBe ReservationIsConfirmedOnSharedTable(
+            customerName = "John",
+            date = date1,
+            qtte = Quantity(3)
+        )
+        }
+
+
+
 })
