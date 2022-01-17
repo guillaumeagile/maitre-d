@@ -4,6 +4,8 @@
 1. Prochaine étape remonter le reservation number dans les méthode reserve(...)
 2. continuer en produisant ce numéro de reservation (à faire porter par un truc => SRP)
 3. ce numéro de réservation doit probablement apparaitre dans les événements 
+4. Passer en collections réellement immutable  https://www.baeldung.com/kotlin/immutable-collections
+
 
 ## Énoncé
 [Sujet original de Mark Seemann](https://blog.ploeh.dk/2020/01/27/the-maitre-d-kata/)
