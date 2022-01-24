@@ -1,5 +1,9 @@
 package freshStart
 
+import arrow.core.None
+import arrow.core.Option
+import arrow.core.Some
+import arrow.core.none
 import freshStart.events.Event
 import freshStart.events.ReservationIsCancelOnSharedTable
 import freshStart.events.ReservationIsConfirmedOnSharedTable
@@ -51,5 +55,9 @@ data class SharedTable(override val size: Int, val dailySeatsOverallReservations
 
     override fun toString(): String {
         return "size=${this.size}"
+    }
+
+    fun lookupReservation(date: LocalDate, idCustomer: String): Option<Quantity> {
+        return none()  //
     }
 }

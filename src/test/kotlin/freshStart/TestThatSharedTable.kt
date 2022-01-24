@@ -1,5 +1,7 @@
 package freshStart
 
+import arrow.core.Some
+import arrow.core.none
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -92,4 +94,20 @@ class TestThatSharedTable : StringSpec({
 
         resultTable.canIReserve(date1, Quantity(1)) shouldBe false
     }
+
+    "should be able to get an empty result on lookup for inexisting reservation " {
+        val table1 = SharedTable(2)
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
+        table1.lookupReservation(date= date1, idCustomer= "1") shouldBe none()
+    }
+
+
+     "should be able to lookup after a reservation for a customerId at a given date"  {
+        val table1 = SharedTable(2)
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
+        val result = table1.reserve(date1, Quantity(1), idCustomer= "1")
+
+         result.lookupReservation(date= date1, idCustomer= "1") shouldBe Some( Quantity( 1))
+    }
+
 })
