@@ -2,13 +2,13 @@ package freshStart
 
 import java.time.LocalDate
 
-typealias NumeroDeReservation = Int
+typealias IdCustomer = String
 
 data class DailySeats(
-    val dailyAccumulation: Map<LocalDate, List<Pair<NumeroDeReservation, Quantity>>> = mapOf()
+    val dailyAccumulation: Map<LocalDate, List<Pair<IdCustomer, Quantity>>> = mapOf()
 ) {
-    fun addReservation(date: LocalDate, seats: Quantity, reservationNumber: NumeroDeReservation): DailySeats {
-        val newListAtDate = dailyAccumulation.getOrDefault(date, emptyList()) + Pair(reservationNumber, seats)
+    fun addReservation(date: LocalDate, seats: Quantity, idCustomer: IdCustomer): DailySeats {
+        val newListAtDate = dailyAccumulation.getOrDefault(date, emptyList()) + Pair(idCustomer, seats)
         return DailySeats(
             dailyAccumulation + Pair(date, newListAtDate)
         )
@@ -20,7 +20,7 @@ data class DailySeats(
             .fold(Quantity(0)) { acc, next -> acc + next }
 
 
-    fun removeReservation(reservationNumber: NumeroDeReservation): DailySeats {
+    fun removeReservation(reservationNumber: IdCustomer): DailySeats {
         if (dailyAccumulation.entries.isEmpty())
             return DailySeats(dailyAccumulation)
 

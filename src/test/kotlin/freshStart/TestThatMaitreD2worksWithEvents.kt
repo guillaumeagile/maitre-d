@@ -21,7 +21,7 @@ class TestThatMaitreD2worksWithEvents : StringSpec({
         maitreD2.handle(command)
 
         // ASSERT
-        maitreD2.events shouldContain ReservationIsConfirmedOnSharedTable(1, date = date1, qtte = Quantity(2))
+        maitreD2.events shouldContain ReservationIsConfirmedOnSharedTable("1", date = date1, qtte = Quantity(2))
     }
 
     "une commande de réservation  est refusée car le nombre de convives demandé est supérieur à la capacité" {
@@ -47,11 +47,11 @@ class TestThatMaitreD2worksWithEvents : StringSpec({
         // ACT
         maitreD2.handle(command)
         // ASSERT
-        maitreD2.events shouldContain ReservationIsConfirmedOnSharedTable(1, date = date1, qtte = Quantity(3))
+        maitreD2.events shouldContain ReservationIsConfirmedOnSharedTable("1", date = date1, qtte = Quantity(3))
     }
 
     "should not be able to reserve a table mutliple times same date, if the size of the table is reached"
-        .config(enabled = false) { // TODO: pour fonctionner, les commandes doivent donner un numéro de commande différent, et il doit être pris en compte dans 'handle'
+        .config(enabled = true) {
             // ARRANGE
             val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
             val maitreD2 = MaitreD2(SharedTable(3, DailySeats()))
@@ -75,7 +75,7 @@ class TestThatMaitreD2worksWithEvents : StringSpec({
         maitreD2.handle(command2)
         // ASSERT
         maitreD2.events.last() shouldBe ReservationIsConfirmedOnSharedTable(
-            reservationNumber = 1,
+            idCustomer = "1",
             date = date1,
             qtte = Quantity(1)
         )
@@ -90,7 +90,7 @@ class TestThatMaitreD2worksWithEvents : StringSpec({
         val command2 = ReservationCommand(guestsCount = 3, wishedDate = date2)
         maitreD2.handle(command)
         maitreD2.events.last() shouldBe ReservationIsConfirmedOnSharedTable(
-            reservationNumber = 1,
+            idCustomer = "1",
             date = date1,
             qtte = Quantity(3)
         )
@@ -98,7 +98,7 @@ class TestThatMaitreD2worksWithEvents : StringSpec({
         maitreD2.handle(command2)
         // ASSERT
         maitreD2.events.last() shouldBe ReservationIsConfirmedOnSharedTable(
-            reservationNumber = 1,
+            idCustomer = "1",
             date = date2,
             qtte = Quantity(3)
         )

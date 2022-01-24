@@ -1,5 +1,5 @@
 package freshStart.events
 
-import freshStart.NumeroDeReservation
+import freshStart.IdCustomer
 
-data class ReservationIsCancelOnSharedTable(val reservationNumber: NumeroDeReservation) : Event
+data class ReservationIsCancelOnSharedTable(val idCustomer: IdCustomer) : Event

@@ -27,7 +27,7 @@ class TestThatReplayOnSharedTable : StringSpec({
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
         val events: Collection<Event> = setOf<Event>().plus(
             ReservationIsConfirmedOnSharedTable(
-                reservationNumber = 1,
+                idCustomer = "1",
                 date = date1,
                 qtte = Quantity(1)
             )
@@ -36,7 +36,6 @@ class TestThatReplayOnSharedTable : StringSpec({
         val sut = SharedTable(size = 4)
 
         val actual = sut.replayOn(listEvents = events)
-        // TODO: law of demeter:  écrire une méthode qui vérifie que la résa #X est bien à la date D
         actual.dailySeatsOverallReservations.dailyAccumulation.containsKey(date1) shouldBe true
         actual.dailySeatsOverallReservations.howManyReservedOn(date1) shouldBe Quantity(1)
     }
@@ -48,12 +47,12 @@ class TestThatReplayOnSharedTable : StringSpec({
 
         val events = setOf(
             ReservationIsConfirmedOnSharedTable(
-                reservationNumber = 1,
+                idCustomer = "1",
                 date = date1,
                 qtte = Quantity(1)
             ),
             ReservationIsConfirmedOnSharedTable(
-                reservationNumber = 1,
+                idCustomer = "1",
                 date = date2,
                 qtte = Quantity(3)
             )
@@ -64,7 +63,6 @@ class TestThatReplayOnSharedTable : StringSpec({
         val actual = sut.replayOn(listEvents = events)
 
         // Assert
-        // TODO: law of demeter:  écrire une méthode qui vérifie que la résa #X est bien à la date D
         actual.dailySeatsOverallReservations.dailyAccumulation.containsKey(date1) shouldBe true
         actual.dailySeatsOverallReservations.dailyAccumulation.containsKey(date2) shouldBe true
         actual.dailySeatsOverallReservations.dailyAccumulation[date1]!!.first().second shouldBe Quantity(1)
@@ -77,12 +75,12 @@ class TestThatReplayOnSharedTable : StringSpec({
 
         val events = setOf(
             ReservationIsConfirmedOnSharedTable(
-                reservationNumber = 1,
+                idCustomer = "1",
                 date = date1,
                 qtte = Quantity(2)
             ),
             ReservationIsDeclinedOnSharedTable(
-                reservationNumber = 99
+                idCustomer = 99
             )
         )
         val sut = SharedTable(size = 4)
@@ -91,7 +89,6 @@ class TestThatReplayOnSharedTable : StringSpec({
         val actual = sut.replayOn(listEvents = events)
 
         // Assert
-        // TODO: law of demeter:  écrire une méthode qui vérifie que la résa  est bien à la date D
         actual.dailySeatsOverallReservations.dailyAccumulation.containsKey(date1) shouldBe true
         actual.dailySeatsOverallReservations.dailyAccumulation[date1]!!.first().second shouldBe Quantity(value=2)
     }
@@ -102,12 +99,12 @@ class TestThatReplayOnSharedTable : StringSpec({
 
         val events = setOf(
             ReservationIsConfirmedOnSharedTable(
-                reservationNumber = 1,
+                idCustomer = "1",
                 date = date1,
                 qtte = Quantity(2)
             ),
             ReservationIsCancelOnSharedTable(
-                reservationNumber = 1
+                idCustomer = "1"
             )
         )
         val sut = SharedTable(size = 4)
@@ -116,7 +113,6 @@ class TestThatReplayOnSharedTable : StringSpec({
         val actual = sut.replayOn(listEvents = events)
 
         // Assert
-        // TODO: law of demeter:  écrire une méthode qui vérifie que la résa #X est bien à la date D
         actual.dailySeatsOverallReservations.dailyAccumulation.containsKey(date1) shouldBe false
     }
 

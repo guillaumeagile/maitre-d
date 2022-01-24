@@ -13,11 +13,11 @@ data class SharedTable(override val size: Int, val dailySeatsOverallReservations
             newDailySeats = newDailySeats.addReservation(
                 it.date,
                 it.qtte,
-                it.reservationNumber
+                it.idCustomer
             )
         }
         listEvents.filterIsInstance<ReservationIsCancelOnSharedTable>().forEach {
-            newDailySeats = newDailySeats.removeReservation(it.reservationNumber)
+            newDailySeats = newDailySeats.removeReservation(it.idCustomer)
         }
 
         return SharedTable(size = this.size, newDailySeats)
@@ -41,7 +41,7 @@ data class SharedTable(override val size: Int, val dailySeatsOverallReservations
     override fun reserve(date: LocalDate, qtte: Quantity): ITable {
         if (!canIReserve(date, qtte))
             return this
-        return SharedTable(size, dailySeatsOverallReservations.addReservation(date, qtte, reservationNumber = 42))
+        return SharedTable(size, dailySeatsOverallReservations.addReservation(date, qtte, idCustomer = "42"))
     }
 
     override fun canIReserve(date: LocalDate, qtte: Quantity): Boolean {

@@ -27,7 +27,7 @@ class MaitreD2(val sharedTableInInitialState: SharedTable) {
             // si OK, on change ce numéro de version juste au moment où on enregistre l'évènement de mutation
             events = events.plus(
                 ReservationIsConfirmedOnSharedTable(
-                    reservationNumber = 1,
+                    idCustomer = "1",
                     date = command.wishedDate,
                     qtte = Quantity(command.guestsCount)
                 )
@@ -35,7 +35,7 @@ class MaitreD2(val sharedTableInInitialState: SharedTable) {
             // l'ajout de l'évènement sera être rejeté si un autre évènement de mutation a été trouvé pour le même ID de ressource
             // mais portant sur une version différente de la version lue au moment du replayOn (fonction de projection)
         } else {
-            events = events.plus(ReservationIsDeclinedOnSharedTable(reservationNumber = 1))
+            events = events.plus(ReservationIsDeclinedOnSharedTable(idCustomer = 1))
         }
     }
 }

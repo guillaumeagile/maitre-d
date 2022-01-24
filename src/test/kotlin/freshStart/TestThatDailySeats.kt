@@ -13,7 +13,7 @@ class TestThatDailySeats : StringSpec({
         val dailySeats = DailySeats()
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
 
-        val sut = dailySeats.addReservation(date = date1, seats = Quantity(value = 3), reservationNumber = 1)
+        val sut = dailySeats.addReservation(date = date1, seats = Quantity(value = 3), idCustomer = "1")
 
         sut.howManyReservedOn(date = date1) shouldBe 3
     }
@@ -22,8 +22,8 @@ class TestThatDailySeats : StringSpec({
         val dailySeats = DailySeats()
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
 
-        val sut = dailySeats.addReservation(date = date1, seats = Quantity(value = 3), reservationNumber = 1)
-        val sut2 = sut.addReservation(date = date1, seats = Quantity(value = 2), reservationNumber = 2)
+        val sut = dailySeats.addReservation(date = date1, seats = Quantity(value = 3), idCustomer = "1")
+        val sut2 = sut.addReservation(date = date1, seats = Quantity(value = 2), idCustomer = "2")
 
         sut2.howManyReservedOn(date = date1) shouldBe 3 + 2
     }
@@ -42,7 +42,7 @@ class TestThatDailySeats : StringSpec({
         val dailySeats = DailySeats()
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
 
-        val sut = dailySeats.addReservation(date = date1, seats = Quantity(2), reservationNumber = 4)
+        val sut = dailySeats.addReservation(date = date1, seats = Quantity(2), idCustomer = "4")
 
         sut.howManyReservedOn(date = date1) shouldBe 2
     }
