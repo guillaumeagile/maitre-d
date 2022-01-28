@@ -50,8 +50,7 @@ class TestThatMaitreD2worksWithEvents : StringSpec({
         maitreD2.events shouldContain ReservationIsConfirmedOnSharedTable("1", date = date1, qtte = Quantity(3))
     }
 
-    "should not be able to reserve a table mutliple times same date, if the size of the table is reached"
-        .config(enabled = true) {
+    "should not be able to reserve a table mutliple times same date, if the size of the table is reached" {
             // ARRANGE
             val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
             val maitreD2 = MaitreD2(SharedTable(3, DailySeats()))

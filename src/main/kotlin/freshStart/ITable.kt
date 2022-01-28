@@ -8,5 +8,5 @@ interface ITable {
     fun reserve(): ITable
     val size: Int
     fun canIReserve(date: LocalDate, qtte: Quantity): Boolean
-    fun reserve(date: LocalDate, qtte: Quantity): ITable
+    fun reserve(date: LocalDate, qtte: Quantity, idCustomer: String = "42"): ITable
 }

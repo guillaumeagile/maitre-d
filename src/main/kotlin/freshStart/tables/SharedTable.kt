@@ -1,8 +1,8 @@
 package freshStart
 
-import arrow.core.None
 import arrow.core.Option
-import arrow.core.Some
+import arrow.core.firstOrNone
+import arrow.core.getOrNone
 import arrow.core.none
 import freshStart.events.Event
 import freshStart.events.ReservationIsCancelOnSharedTable
@@ -42,10 +42,10 @@ data class SharedTable(override val size: Int, val dailySeatsOverallReservations
         return this
     }
 
-    override fun reserve(date: LocalDate, qtte: Quantity): ITable {
+    override fun reserve(date: LocalDate, qtte: Quantity, idCustomer: String): ITable {
         if (!canIReserve(date, qtte))
             return this
-        return SharedTable(size, dailySeatsOverallReservations.addReservation(date, qtte, idCustomer = "42"))
+        return SharedTable(size, dailySeatsOverallReservations.addReservation(date, qtte, idCustomer = idCustomer))
     }
 
     override fun canIReserve(date: LocalDate, qtte: Quantity): Boolean {
@@ -58,6 +58,7 @@ data class SharedTable(override val size: Int, val dailySeatsOverallReservations
     }
 
     fun lookupReservation(date: LocalDate, idCustomer: String): Option<Quantity> {
-        return none()  //
+        return dailySeatsOverallReservations.dailyAccumulation.getOrNone(date)
+            .flatMap { it.firstOrNone { (id, _) -> id == idCustomer }}.map { (_, quantity) -> quantity }
     }
 }

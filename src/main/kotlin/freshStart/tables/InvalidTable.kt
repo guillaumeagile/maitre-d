@@ -19,7 +19,7 @@ class InvalidTable(override val size: Int = 0) : ITable {
         TODO("Not yet implemented")
     }
 
-    override fun reserve(date: LocalDate, qtte: Quantity): ITable {
+    override fun reserve(date: LocalDate, qtte: Quantity, idCustomer: String): ITable {
         TODO("Not yet implemented")
     }
 

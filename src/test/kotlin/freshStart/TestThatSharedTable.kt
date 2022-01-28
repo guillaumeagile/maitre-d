@@ -101,13 +101,20 @@ class TestThatSharedTable : StringSpec({
         table1.lookupReservation(date= date1, idCustomer= "1") shouldBe none()
     }
 
-
-     "should be able to lookup after a reservation for a customerId at a given date"  {
+    "should be able to lookup after a reservation for a customerId at a given date"  {
         val table1 = SharedTable(2)
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
-        val result = table1.reserve(date1, Quantity(1), idCustomer= "1")
+        val result = table1.reserve(date1, Quantity(1), idCustomer= "1") as SharedTable
 
-         result.lookupReservation(date= date1, idCustomer= "1") shouldBe Some( Quantity( 1))
+        result.lookupReservation(date= date1, idCustomer= "1") shouldBe Some( Quantity( 1))
+    }
+
+    "should return none when looking up after a reservation for an inexistant idCustomer"  {
+        val table1 = SharedTable(2)
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
+        val result = table1.reserve(date1, Quantity(1), idCustomer= "1") as SharedTable
+
+        result.lookupReservation(date= date1, idCustomer= "2") shouldBe none()
     }
 
 })
