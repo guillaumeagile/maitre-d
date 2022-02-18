@@ -1,9 +1,6 @@
 package freshStart
 
-import freshStart.events.Event
-import freshStart.events.ReservationIsCancelOnSharedTable
-import freshStart.events.ReservationIsConfirmedOnSharedTable
-import freshStart.events.ReservationIsDeclinedOnSharedTable
+import freshStart.events.*
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import java.time.LocalDate
@@ -117,4 +114,31 @@ class TestThatReplayOnSharedTable : StringSpec({
     }
 
     // TODO: écrire un test dans lequel on a 2 résa à la même date, et on ne veut en supprimer qu'une des 2 ;)
+
+
+    "new event update".config(enabled = false) {
+        val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
+
+        val events = setOf(
+            ReservationIsConfirmedOnSharedTable(
+                idCustomer = "1",
+                date = date1,
+                qtte = Quantity(2)
+            ),
+            ReservationQuantityIsUpdatedOnSharedTable(
+                idCustomer = "1",
+                date = date1,
+                qtte = Quantity(3)
+            )
+        )
+        val sut = SharedTable(size = 4)
+
+        // Act
+        val actual = sut.replayOn(listEvents = events)
+
+        // Assert
+        actual.dailySeatsOverallReservations.dailyAccumulation.containsKey(date1) shouldBe true
+        actual.dailySeatsOverallReservations.howManyReservedOn(date1) shouldBe Quantity(3)
+    }
+
 })

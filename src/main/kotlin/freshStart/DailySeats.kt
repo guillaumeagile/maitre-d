@@ -20,7 +20,7 @@ data class DailySeats(
             .fold(Quantity(0)) { acc, next -> acc + next }
 
 
-    fun removeReservation(reservationNumber: IdCustomer): DailySeats {
+    fun removeReservation(reservationNumber: IdCustomer): DailySeats {  //TODO: renommer ce param en idCustomer
         if (dailyAccumulation.entries.isEmpty())
             return DailySeats(dailyAccumulation)
 
@@ -32,5 +32,20 @@ data class DailySeats(
                 .minus(entryDeLaReservationASupprimer)
                 .associateBy(keySelector = { it.key }, valueTransform = { it.value })
         return DailySeats(dailyAccumulation2new)
+    }
+
+    fun updateReservationQuantity(
+        searchedIdCustomer: IdCustomer,
+        searchedDate: LocalDate,
+        seats: Quantity
+    ): DailySeats {
+     /*
+        val dailyAccumulation2new =
+            dailyAccumulation.entries
+                .filter { (date, value) -> searchedDate != date && value.any { (first, _) ->  first != searchedIdCustomer } }
+                .associateBy(keySelector = { it.key }, valueTransform = { it.value })
+        return DailySeats(dailyAccumulation2new)*/
+        val    newDailySeats= removeReservation(searchedIdCustomer )
+        return newDailySeats.addReservation(date = searchedDate, seats = seats, idCustomer = searchedIdCustomer)
     }
 }

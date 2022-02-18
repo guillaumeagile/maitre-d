@@ -7,6 +7,7 @@ import arrow.core.none
 import freshStart.events.Event
 import freshStart.events.ReservationIsCancelOnSharedTable
 import freshStart.events.ReservationIsConfirmedOnSharedTable
+import freshStart.events.ReservationQuantityIsUpdatedOnSharedTable
 import java.time.LocalDate
 
 data class SharedTable(override val size: Int, val dailySeatsOverallReservations: DailySeats) : ITable {
@@ -22,6 +23,9 @@ data class SharedTable(override val size: Int, val dailySeatsOverallReservations
         }
         listEvents.filterIsInstance<ReservationIsCancelOnSharedTable>().forEach {
             newDailySeats = newDailySeats.removeReservation(it.idCustomer)
+        }
+        listEvents.filterIsInstance<ReservationQuantityIsUpdatedOnSharedTable>().forEach{
+            // newDailySeats = newDailySeats.updateReservationQuantity(it.idCustomer, it.date, it.qtte )
         }
 
         return SharedTable(size = this.size, newDailySeats)
