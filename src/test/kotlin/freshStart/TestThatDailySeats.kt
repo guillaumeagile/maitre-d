@@ -50,7 +50,7 @@ class TestThatDailySeats : StringSpec({
         dailySeats.howManyReservedOn(reservationDate) shouldBe Quantity(0)
     }
 
-    "x".config(enabled = false) {
+    "x" {
         val dailySeats = DailySeats()
 
         val reservationDate = LocalDate.of(1990, Month.DECEMBER, 30)
@@ -64,12 +64,18 @@ class TestThatDailySeats : StringSpec({
             seats = Quantity(4),
             idCustomer = "42"
         )
-        sut.howManyReservedOn(reservationDate) shouldBe Quantity(6)
+        val sut2 = sut.addReservation(
+            date = LocalDate.of(2010, Month.DECEMBER, 11),
+            seats = Quantity(3),
+            idCustomer = "1"
+        )
+        sut2.howManyReservedOn(reservationDate) shouldBe Quantity(6)
+        sut2.howManyReservedOn(LocalDate.of(2010, Month.DECEMBER, 11)) shouldBe Quantity(3)
 
-        val sut2 = sut.removeReservation(idCustomer = "1")
+        val sut3 = sut2.removeReservation(idCustomer = "1")
 
-
-        sut2.howManyReservedOn(reservationDate) shouldBe Quantity(4)
+        sut3.howManyReservedOn(LocalDate.of(2010, Month.DECEMBER, 11)) shouldBe Quantity(3)
+        sut3.howManyReservedOn(reservationDate) shouldBe Quantity(4)
     }
 
 
