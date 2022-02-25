@@ -1,5 +1,8 @@
 package freshStart
 
+import arrow.core.None
+import arrow.core.Some
+import arrow.core.firstOrNone
 import java.time.LocalDate
 
 typealias IdCustomer = String
@@ -20,18 +23,24 @@ data class DailySeats(
             .fold(Quantity(0)) { acc, next -> acc + next }
 
 
-    fun removeReservation(reservationNumber: IdCustomer): DailySeats {  //TODO: renommer ce param en idCustomer
+    fun removeReservation(idCustomer: IdCustomer): DailySeats {
         if (dailyAccumulation.entries.isEmpty())
             return DailySeats(dailyAccumulation)
 
         val entryDeLaReservationASupprimer =
-            dailyAccumulation.entries.first { (_, value) -> value.any { (first, _) -> first == reservationNumber } }
+            dailyAccumulation.entries.firstOrNone() { (_, value) -> value.any { (first, _) -> first == idCustomer } }
 
-        val dailyAccumulation2new =
-            dailyAccumulation.entries
-                .minus(entryDeLaReservationASupprimer)
-                .associateBy(keySelector = { it.key }, valueTransform = { it.value })
-        return DailySeats(dailyAccumulation2new)
+        when (entryDeLaReservationASupprimer) {
+            is None -> return DailySeats(dailyAccumulation)
+            is Some -> {
+                val dailyAccumulation2new =
+                    dailyAccumulation.entries
+                        .minus(entryDeLaReservationASupprimer.value)
+                        .associateBy(keySelector = { it.key }, valueTransform = { it.value })
+                return DailySeats(dailyAccumulation2new)
+            }
+        }
+
     }
 
     fun updateReservationQuantity(
@@ -39,13 +48,13 @@ data class DailySeats(
         searchedDate: LocalDate,
         seats: Quantity
     ): DailySeats {
-     /*
-        val dailyAccumulation2new =
-            dailyAccumulation.entries
-                .filter { (date, value) -> searchedDate != date && value.any { (first, _) ->  first != searchedIdCustomer } }
-                .associateBy(keySelector = { it.key }, valueTransform = { it.value })
-        return DailySeats(dailyAccumulation2new)*/
-        val    newDailySeats= removeReservation(searchedIdCustomer )
+        /*
+           val dailyAccumulation2new =
+               dailyAccumulation.entries
+                   .filter { (date, value) -> searchedDate != date && value.any { (first, _) ->  first != searchedIdCustomer } }
+                   .associateBy(keySelector = { it.key }, valueTransform = { it.value })
+           return DailySeats(dailyAccumulation2new)*/
+        val newDailySeats = removeReservation(searchedIdCustomer)
         return newDailySeats.addReservation(date = searchedDate, seats = seats, idCustomer = searchedIdCustomer)
     }
 }
