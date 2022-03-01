@@ -3,7 +3,6 @@ package freshStart
 import arrow.core.Option
 import arrow.core.firstOrNone
 import arrow.core.getOrNone
-import arrow.core.none
 import freshStart.events.Event
 import freshStart.events.ReservationIsCancelOnSharedTable
 import freshStart.events.ReservationIsConfirmedOnSharedTable

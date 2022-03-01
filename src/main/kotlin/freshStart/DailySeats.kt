@@ -1,8 +1,6 @@
 package freshStart
 
-import arrow.core.None
-import arrow.core.Some
-import arrow.core.firstOrNone
+import arrow.core.*
 import java.time.LocalDate
 
 typealias IdCustomer = String
@@ -17,31 +15,31 @@ data class DailySeats(
         )
     }
 
-
     fun howManyReservedOn(date: LocalDate): Quantity =
         dailyAccumulation.getOrDefault(date, emptyList()).map { it.second }
             .fold(Quantity(0)) { acc, next -> acc + next }
 
-
-    fun removeReservation(idCustomer: IdCustomer): DailySeats {
+    fun removeReservation(idCustomer: IdCustomer, reservationDate: LocalDate = LocalDate.MIN): DailySeats {
         if (dailyAccumulation.entries.isEmpty())
             return DailySeats(dailyAccumulation)
 
-        val entryDeLaReservationASupprimer =
-            dailyAccumulation.entries.firstOrNone() { (_, value) -> value.any { (first, _) -> first == idCustomer } }
+        val lookupFirstReservationToDelete = lookupReservationsAtDateForCustomer(idCustomer, reservationDate)
 
-        when (entryDeLaReservationASupprimer) {
+        when (lookupFirstReservationToDelete) {
             is None -> return DailySeats(dailyAccumulation)
             is Some -> {
                 val dailyAccumulation2new =
                     dailyAccumulation.entries
-                        .minus(entryDeLaReservationASupprimer.value)
+                        .minus(lookupFirstReservationToDelete.value)
                         .associateBy(keySelector = { it.key }, valueTransform = { it.value })
                 return DailySeats(dailyAccumulation2new)
             }
         }
-
     }
+
+    fun lookupReservationsAtDateForCustomer(idCustomer: IdCustomer, reservationDate: LocalDate) =
+        dailyAccumulation.entries.firstOrNone() { (date, value) -> value.any { (first, _) -> first == idCustomer && date == reservationDate } }
+
 
     fun updateReservationQuantity(
         searchedIdCustomer: IdCustomer,
