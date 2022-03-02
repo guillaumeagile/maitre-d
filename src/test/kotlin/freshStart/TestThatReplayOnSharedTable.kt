@@ -90,7 +90,7 @@ class TestThatReplayOnSharedTable : StringSpec({
         actual.dailySeatsOverallReservations.dailyAccumulation[date1]!!.first().second shouldBe Quantity(value=2)
     }
 
-    "new event cancel" {
+    "new event cancel".config (enabled = false){
         // Arrange
         val date1 = LocalDate.of(1990, Month.DECEMBER, 31)
 

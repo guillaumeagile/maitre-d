@@ -102,7 +102,8 @@ class TestThatDailySeats : StringSpec({
             seats = Quantity(3),
             idCustomer = "1"
         )
-        // sut2.lookupReservationsAtDateForCustomer("1", reservationDate) shouldBe Some(reservationDate to listOf("1" to Quantity(2) ) )
+//        sut2.lookupReservationsAtDateForCustomer("1", reservationDate).toPair() shouldBe Some(reservationDate to listOf("1" to Quantity(2) ) )
+        sut2.lookupReservationsAtDateForCustomer2("1", reservationDate)?.toPair() shouldBe (reservationDate to listOf("1" to Quantity(2) ))
         /*   problem: data class diff for arrow.core.Some
 Expected :Option.Some((1990-12-30, [(1, Quantity(value=2))]))
 Actual   :Option.Some(1990-12-30=[(1, Quantity(value=2))]) */
@@ -115,6 +116,10 @@ Actual   :Option.Some(1990-12-30=[(1, Quantity(value=2))]) */
     }
 
 
+//    "test entry vs key". {
+//        val m = Entry ("a", 1)
+//
+//    }
 
     "removeInvalidReservationNumber" {
         val dailySeats = DailySeats()
