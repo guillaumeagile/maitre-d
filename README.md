@@ -27,6 +27,10 @@ En fin d'exercice, on doit être en mesure de gérer les réservations de restau
 L'implémentation proposée dans ce repository s'appuie sur l'Event Sourcing pour la persistence des données.
 Pour les besoins de l'exercice, les différents évènements sont stockés sous forme de DTOs en mémoire.
 
+L'event sourcing pourrait être amélioré, afin d'éviter de stocker un état des réservations qui s'est incidieusement logé
+dans la valeur dailyAccumulation  de DailySeats
+On pourrait connaitre l'état des dailyAccumulation (qui sont en fait la mémorisation des réservations effectuées à date) par projection 
+des évènements au lieu de garder cette variable de stockage.
 
 
 
