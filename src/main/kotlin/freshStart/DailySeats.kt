@@ -37,11 +37,11 @@ data class DailySeats(
         }
     }
 
-    fun lookupReservationsAtDateForCustomer(idCustomer: IdCustomer, reservationDate: LocalDate) =
-        dailyAccumulation.entries.firstOrNone() { (date, value) -> value.any { (first, _) -> first == idCustomer && date == reservationDate } }
-
-    fun lookupReservationsAtDateForCustomer2(idCustomer: IdCustomer, reservationDate: LocalDate) =
-        dailyAccumulation.entries.firstOrNull { (date, value) -> value.any { (first, _) -> first == idCustomer && date == reservationDate } }
+    fun lookupReservationsAtDateForCustomer(idCustomer: IdCustomer, reservationDate: LocalDate) {
+        val listAllReservationAtFixedDate = dailyAccumulation.filter { it -> it.key == reservationDate }.firstNotNullOf { it -> it.value }
+        return listAllReservationAtFixedDate.filter { it -> it.first == idCustomer }.firstOrNone()
+//        dailyAccumulation.entries.firstOrNone() { (date, value) -> value.any { (first, _) -> first == idCustomer && date == reservationDate } }
+    }
 
     fun updateReservationQuantity(
         searchedIdCustomer: IdCustomer,
