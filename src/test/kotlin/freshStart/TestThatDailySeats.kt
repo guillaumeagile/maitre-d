@@ -96,7 +96,6 @@ class TestThatDailySeats : StringSpec({
             seats = Quantity(2),
             idCustomer = "1"
         )
-        // TODO: remettre cette donnée, et que le test passe
         val sut = dailySeats1.addReservation(
             date = reservationDate,
             seats = Quantity(4),
@@ -108,7 +107,6 @@ class TestThatDailySeats : StringSpec({
             seats = Quantity(3),
             idCustomer = "1"
         )
-//        sut2.lookupReservationsAtDateForCustomer("1", reservationDate) shouldBe Some((reservationDate to listOf("1" to Quantity(2) ) ).toEntry())
 
         val actual = sut2.lookupReservationsAtDateForCustomer("1", reservationDate)
         actual.isEmpty() shouldBe false
@@ -118,10 +116,18 @@ class TestThatDailySeats : StringSpec({
     }
 
 
-//    "test entry vs key". {
-//        val m = Entry ("a", 1)
-//
-//    }
+
+    "lookup for reservation with empty dailyseats" {
+
+        val dailySeats = DailySeats()
+
+        val reservationDate = LocalDate.of(1990, Month.DECEMBER, 30)
+
+        val actual = dailySeats.lookupReservationsAtDateForCustomer("1", reservationDate)
+        actual.isEmpty() shouldBe true
+    }
+
+
 
     "removeInvalidReservationNumber" {
         val dailySeats = DailySeats()
