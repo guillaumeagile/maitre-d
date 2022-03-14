@@ -2,6 +2,7 @@ package freshStart
 
 import arrow.core.*
 import java.time.LocalDate
+import kotlin.collections.Map.Entry
 
 typealias IdCustomer = String
 
@@ -37,9 +38,15 @@ data class DailySeats(
         }
     }
 
-    fun lookupReservationsAtDateForCustomer(idCustomer: IdCustomer, reservationDate: LocalDate) {
+//    fun lookupReservationsAtDateForCustomer(idCustomer: IdCustomer, reservationDate: LocalDate): Option<Map.Entry<LocalDate, List<Pair<IdCustomer, Quantity>>>> =
+//        dailyAccumulation.entries.firstOrNone() { (date, value) -> value.any { (first, _) -> first == idCustomer && date == reservationDate } }
+
+    fun lookupReservationsAtDateForCustomer(idCustomer: IdCustomer, reservationDate: LocalDate) : Option<Entry<LocalDate, List<Pair<IdCustomer, Quantity>>>> {
         val listAllReservationAtFixedDate = dailyAccumulation.filter { it -> it.key == reservationDate }.firstNotNullOf { it -> it.value }
-        return listAllReservationAtFixedDate.filter { it -> it.first == idCustomer }.firstOrNone()
+        val filterOnCustomerId = listAllReservationAtFixedDate.filter { it -> it.first == idCustomer }
+        val mapReservationDateListCurstomerId = mapOf(reservationDate to filterOnCustomerId)
+        return mapReservationDateListCurstomerId.entries.firstOrNone()
+//        return listAllReservationAtFixedDate.filter { it -> it.first == idCustomer }.firstOrNone()
 //        dailyAccumulation.entries.firstOrNone() { (date, value) -> value.any { (first, _) -> first == idCustomer && date == reservationDate } }
     }
 
