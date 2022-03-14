@@ -31,7 +31,8 @@ data class DailySeats(
             is Some -> {
                 val dailyAccumulation2new =
                     dailyAccumulation.entries
-                        .minus(lookupFirstReservationToDelete.value)
+                        .minus(lookupFirstReservationToDelete.value)  // TODO: on est complétement sur la mauvaise voie, car dans tous les cas on va
+                            // enlever la liste entière de toutes les réservations à date donnée (principe du MINUS)
                         .associateBy(keySelector = { it.key }, valueTransform = { it.value })
                 return DailySeats(dailyAccumulation2new)
             }
