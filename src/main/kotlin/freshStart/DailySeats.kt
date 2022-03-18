@@ -39,19 +39,14 @@ data class DailySeats(
         }
     }
 
-
     fun lookupReservationsAtDateForCustomer(idCustomer: IdCustomer, reservationDate: LocalDate) : Option<Entry<LocalDate, List<Pair<IdCustomer, Quantity>>>> {
-        // fold à utiliser pour gérer le firstOrNone
-        // Test avec when, le problème est le filter retournant une liste vide
-//        when (dailyAccumulation.filter { it -> it.key == reservationDate }.foldLeft(none())) {
-//            is  -> return none()
-//            is Some ->
-//        }
         val listAllReservationAtFixedDate = dailyAccumulation.filter { it -> it.key == reservationDate }
-            .firstNotNullOf { it -> it.value }
-        val filterOnCustomerId = listAllReservationAtFixedDate.filter { it -> it.first == idCustomer }
-        val mapReservationDateListCurstomerId = mapOf(reservationDate to filterOnCustomerId)
-        return mapReservationDateListCurstomerId.entries.firstOrNone()
+        if (listAllReservationAtFixedDate.any()) {
+            val filterOnCustomerId = listAllReservationAtFixedDate.firstNotNullOf { it -> it.value }.filter { it -> it.first == idCustomer }
+            val mapReservationDateListCurstomerId = mapOf(reservationDate to filterOnCustomerId)
+            return mapReservationDateListCurstomerId.entries.firstOrNone()
+        }
+        return none()
     }
 
     fun updateReservationQuantity(
