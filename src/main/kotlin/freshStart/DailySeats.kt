@@ -40,7 +40,7 @@ data class DailySeats(
     }
 
     fun lookupReservationsAtDateForCustomer(idCustomer: IdCustomer, reservationDate: LocalDate) : Option<Entry<LocalDate, List<Pair<IdCustomer, Quantity>>>> {
-        val listAllReservationAtFixedDate = dailyAccumulation.filter { it -> it.key == reservationDate }
+        val listAllReservationAtFixedDate: Map<LocalDate, List<Pair<IdCustomer /* = kotlin.String */, Quantity>>> = dailyAccumulation.filter { it -> it.key == reservationDate }
         if (listAllReservationAtFixedDate.any()) {
             val filterOnCustomerId = listAllReservationAtFixedDate.firstNotNullOf { it -> it.value }.filter { it -> it.first == idCustomer }
             val mapReservationDateListCurstomerId = mapOf(reservationDate to filterOnCustomerId)
